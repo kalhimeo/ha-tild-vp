@@ -1,0 +1,1856 @@
+  - type: sections
+    max_columns: 4
+    title: Piscine
+    path: piscine
+    icon: mdi:pool
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                name: Extérieur
+                state_content:
+                  - name
+                  - state
+                tap_action:
+                  action: more-info
+                icon: ''
+                entity: sensor.meteo_temperature_ressentie
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.tild_vp_temperature
+                name: Eau
+                state_content:
+                  - name
+                  - state
+                tap_action:
+                  action: more-info
+                icon: mdi:pool
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: binary_sensor.phileo_vp_detection_de_flux
+                name: Flux
+                state_content: name
+                tap_action:
+                  action: more-info
+                icon: ph:warning-fill
+                color: red
+                visibility:
+                  - condition: state
+                    state: 'off'
+                  - condition: state
+                    entity: binary_sensor.tild_vp_etat_filtration
+                    state: 'on'
+            heading: Piscine
+            tap_action:
+              action: navigate
+              navigation_path: /config/integrations/integration/mqtt
+          - type: custom:custom-features-card
+            features:
+              - type: custom:service-call
+                entries:
+                  - type: button
+                    entity_id: light.tild_vp_eclairage
+                    icon: mdi:lightbulb
+                    tap_action:
+                      action: more-info
+                      target:
+                        entity_id: light.tild_vp_eclairage
+                      data: {}
+                    thumb: tile-icon
+                    styles: |-
+                      :host {
+                        left: -2px;
+                        --feature-color: #ffc107;
+                      }
+                    haptics: true
+                  - type: button
+                    label: ' Éclairage piscine'
+                    entity_id: light.tild_vp_eclairage
+                    icon: ''
+                    autofill_entity_id: false
+                    thumb: transparent
+                    value_attribute: brightness
+                    unit_of_measurement: '%'
+                    styles: |-
+                      :host {
+                        justify-content: flex-start;
+                        flex-direction: row;
+                      }
+                      .label {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        text-align: left;
+                        width: fit-content;
+                        font-size: 14px;
+                        font-weight: 500;
+                      }
+                      .label::after {
+                        content: ' {% if is_state("binary_sensor.piscine_volet_position_100pc_ouverte", "off") %}Bloqué par le volet{% else %}{{ value or 'Off' }}{{ unit if value or '' }}{% endif %}';
+                        align-self: flex-start;
+                        font-size: 12px;
+                        font-weight: 400;
+                        margin-top: 3px;
+                        margin-bottom: -3px;
+                        {% if is_state("binary_sensor.piscine_volet_position_100pc_ouverte", "off") %}
+                          opacity: 0.8;
+                        {% endif %}
+                      }
+                    tap_action:
+                      action: more-info
+                styles: |-
+                  :host {
+                    --feature-button-spacing: 8px;
+                  }
+              - type: custom:service-call
+                entries:
+                  - type: toggle
+                    entity_id: light.tild_vp_eclairage
+                    icon: none
+                    tap_action:
+                      action: toggle
+                      target:
+                        entity_id: light.tild_vp_eclairage
+                      data: {}
+                    thumb: default
+                    unchecked_icon: mdi:power-on
+                    checked_icon: mdi:power-off
+                    check_numeric: true
+                    allow_list: true
+                    full_swipe: false
+                    haptics: true
+                    styles: >-
+                      {% if
+                      is_state("binary_sensor.piscine_volet_position_100pc_ouverte",
+                      "off") %} :host {
+                        pointer-events: none;
+                        cursor: not-allowed;
+                      } {% endif %}
+                  - type: spinbox
+                    entity_id: light.tild_vp_eclairage
+                    unit_of_measurement: '%'
+                    tap_action:
+                      action: perform-action
+                      perform_action: light.turn_on
+                      target:
+                        entity_id:
+                          - light.tild_vp_eclairage
+                      data:
+                        brightness_pct: '{{ value }}'
+                    range:
+                      - 25
+                      - 100
+                    step: 25
+                    value_attribute: brightness
+                    label: '{{ value | int }} %'
+                    haptics: true
+                    value_from_hass_delay: 5000
+                    styles: |-
+                      :host {
+                        {% if is_state("light.tild_vp_eclairage", "off") %}
+                        display: none;
+                        {% endif %}
+                      }
+                styles: |-
+                  :host {
+                    --feature-color: #ffc107;
+                  }
+              - type: custom:service-call
+                entries:
+                  - type: dropdown
+                    entity_id: light.tild_vp_eclairage
+                    value_attribute: effect
+                    options:
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Warm
+                        label: Chaud
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Warm
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Cold
+                        label: Froid
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Cold
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Blue
+                        label: Bleu
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Blue
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Lagoon
+                        label: Lagon
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Lagoon
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Cyan
+                        label: Cyan
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Cyan
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Purple
+                        label: Violet
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Purple
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Magenta
+                        label: Magenta
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Magenta
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Pink
+                        label: Rose
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Pink
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Red
+                        label: Rouge
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Red
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Orange
+                        label: Orange
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Orange
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Green
+                        label: Vert
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Green
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Gradiant
+                        label: Dégradé
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Gradiant
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Rainbow
+                        label: Arc-en-ciel
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Rainbow
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Parade
+                        label: Défilé
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Parade
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Techno
+                        label: Techno
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Techno
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Horizon
+                        label: Horizon
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Horizon
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Magical
+                        label: Magique
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Magical
+                      - entity_id: light.tild_vp_eclairage
+                        value_attribute: effect
+                        option: Random
+                        label: Aléatoire
+                        tap_action:
+                          action: perform-action
+                          perform_action: light.turn_on
+                          target:
+                            entity_id:
+                              - light.tild_vp_eclairage
+                          data:
+                            effect: Random
+                    haptics: true
+                    value_from_hass_delay: 3000
+                    styles: |-
+                      :host {
+                        {% if is_state("light.tild_vp_eclairage", "off") %}
+                        display: none;
+                        {% endif %}
+                      }
+                  - type: spinbox
+                    entity_id: number.tild_vp_vitesse_effets
+                    range:
+                      - 0
+                      - 2
+                    step: 1
+                    value_from_hass_delay: 5000
+                    haptics: true
+                    label: 'Vitesse des effets : {{ value }}'
+                    tap_action:
+                      action: perform-action
+                      perform_action: number.set_value
+                      target:
+                        entity_id:
+                          - number.tild_vp_vitesse_effets
+                      data:
+                        value: '{{ value }}'
+                    styles: |-
+                      :host {
+                        {% if is_state("light.tild_vp_eclairage", "off") or ( not is_state_attr("light.tild_vp_eclairage", "effect","Gradiant") and not is_state_attr("light.tild_vp_eclairage", "effect","Rainbow") and not is_state_attr("light.tild_vp_eclairage", "effect","Parade") and not is_state_attr("light.tild_vp_eclairage", "effect","Techno") and not is_state_attr("light.tild_vp_eclairage", "effect","Horizon") and not is_state_attr("light.tild_vp_eclairage", "effect","Random") and not is_state_attr("light.tild_vp_eclairage", "effect","Magical") ) %}
+                        display: none;
+                        {% endif %}
+                      }
+                    icon: mdi:speedometer
+                styles: ''
+            grid_options:
+              columns: 12
+              rows: auto
+          - type: custom:custom-features-card
+            features:
+              - type: custom:service-call
+                entries:
+                  - type: button
+                    entity_id: cover.volet_piscine
+                    tap_action:
+                      action: more-info
+                      target:
+                        entity_id: cover.volet_piscine
+                      data: {}
+                    thumb: tile-icon
+                    styles: |-
+                      :host {
+                        left: -2px;
+                        {% if is_state("binary_sensor.piscine_volet_position_100pc_ouverte", "on") %}
+                          --icon-color: #ffc107;
+                          --icon-color-alpha: 0.2;
+                          --color: #ffc107;
+                        {% endif %}
+                      }
+                    icon: >-
+                      {% if
+                      is_state("binary_sensor.piscine_volet_position_100pc_ouverte",
+                      "on") %}mdi:window-shutter-open{% elseif
+                      is_state("binary_sensor.piscine_volet_position_100pc_fermee",
+                      "on") %}mdi:window-shutter{% elseif
+                      is_state("binary_sensor.piscine_volet_position_fermeture_en_cours",
+                      "on") %}mdi:arrow-collapse-down{% elseif
+                      is_state("binary_sensor.piscine_volet_position_ouverture_en_cours",
+                      "on") %}mdi:arrow-collapse-up{% else
+                      %}mdi:window-shutter{% endif %}
+                    haptics: true
+                  - type: button
+                    label: ' Volet'
+                    entity_id: cover.volet_piscine
+                    icon: ''
+                    autofill_entity_id: false
+                    thumb: transparent
+                    value_attribute: current_position
+                    unit_of_measurement: '%'
+                    styles: |-
+                      :host {
+                        justify-content: flex-start;
+                        flex-direction: row;
+                      }
+                      .label {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        text-align: left;
+                        width: fit-content;
+                        font-size: 14px;
+                        font-weight: 500;
+                      }
+                      .label::after {
+                        content: ' {% if is_state("binary_sensor.piscine_volet_position_100pc_ouverte", "on") %}Ouvert{% elseif is_state("binary_sensor.piscine_volet_position_100pc_fermee", "on") %}Fermé{% elseif is_state("binary_sensor.piscine_volet_position_fermeture_en_cours", "on") %}Fermeture en cours {{ '-' if value }} {{ (100 - value) if value or '' }}{{ unit if value or '' }}{% elseif is_state("binary_sensor.piscine_volet_position_ouverture_en_cours", "on") %}Ouverture en cours {{ '-' if value }} {{ value or '' }}{{ unit if value or '' }}{% else %}{{ value or 'position non définie' }}{{ unit if value or '' }}{% endif %}';
+                        align-self: flex-start;
+                        font-size: 12px;
+                        font-weight: 400;
+                        margin-top: 3px;
+                        margin-bottom: -3px;
+                      }
+                    tap_action:
+                      action: more-info
+                styles: |-
+                  :host {
+                    --feature-button-spacing: 8px;
+                  }
+              - type: custom:service-call
+                entries:
+                  - type: button
+                    entity_id: cover.volet_piscine
+                    value_attribute: current_position
+                    haptics: true
+                    label: Ouvrir
+                    tap_action:
+                      action: perform-action
+                      perform_action: cover.open_cover
+                      target:
+                        entity_id:
+                          - cover.volet_piscine
+                      data: {}
+                    thumb: default
+                    styles: |2-
+                              :host {
+                                {% if is_state("binary_sensor.piscine_volet_position_100pc_fermee", "on") %}
+                                --color: green;
+                                --opacity: 0.1;
+                                {% endif %}
+                                ;
+                              }
+                  - type: button
+                    entity_id: cover.volet_piscine
+                    icon: mdi:stop
+                    haptics: true
+                    tap_action:
+                      action: perform-action
+                      perform_action: cover.stop_cover
+                      target:
+                        entity_id:
+                          - cover.volet_piscine
+                      data: {}
+                    styles: |-
+                      :host {
+                        flex-basis: 25%;
+                        margin-left: 0; 
+                        margin-right: 0;
+                        flex-shrink: 0;
+                      }
+                  - type: button
+                    entity_id: cover.volet_piscine
+                    haptics: true
+                    label: Fermer
+                    tap_action:
+                      action: perform-action
+                      perform_action: cover.close_cover
+                      target:
+                        entity_id:
+                          - cover.volet_piscine
+                      data: {}
+                    thumb: default
+                    styles: |2-
+                                :host {
+                                {% if not is_state("sensor.zone_piscine_camera_piscine_person_count", "0") or not is_state("sensor.zone_piscine_camera_poolhouse_person_count, "0")  %}
+                                display: none;
+                                {% endif %}
+                                {% if is_state("binary_sensor.piscine_volet_position_100pc_ouverte", "on") %}
+                                  --color: red;
+                                  --opacity: 0.1;
+                                  {% endif %}
+                                  ;
+                                }
+                  - type: button
+                    entity_id: cover.volet_piscine
+                    haptics: true
+                    label: Fermer
+                    tap_action:
+                      action: perform-action
+                      perform_action: cover.close_cover
+                      target:
+                        entity_id:
+                          - cover.volet_piscine
+                      confirmation:
+                        text: >-
+                          La caméra a détecté une personne dans la piscine,
+                          vérifier et confirmer la fermeture du volet ?
+                      data: {}
+                    thumb: default
+                    styles: |2-
+                                :host {
+                                {% if is_state("sensor.zone_piscine_camera_piscine_person_count", "0") and is_state("sensor.zone_piscine_camera_poolhouse_person_count", "0")  %}
+                                display: none;
+                                {% endif %}
+                                {% if is_state("binary_sensor.piscine_volet_position_100pc_ouverte", "on") %}
+                                  --color: red;
+                                  --opacity: 0.1;
+                                  {% endif %}
+                                  ;
+                                }
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:custom-features-card
+            features:
+              - type: custom:service-call
+                entries:
+                  - type: button
+                    entity_id: switch.piscine_fontaine
+                    tap_action:
+                      action: more-info
+                      target:
+                        entity_id: switch.piscine_fontaine
+                      data: {}
+                    thumb: tile-icon
+                    styles: |-
+                      :host {
+                        left: -2px;
+                      }
+                    icon: mdi:waterfall
+                    haptics: true
+                  - type: button
+                    entity_id: switch.piscine_fontaine
+                    icon: ''
+                    autofill_entity_id: false
+                    thumb: transparent
+                    label: ' Fontaine'
+                    styles: |-
+                      :host {
+                        justify-content: flex-start;
+                        flex-direction: row;
+                      }
+                      .label {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        text-align: left;
+                        width: fit-content;
+                        font-size: 14px;
+                        font-weight: 500;
+                      }
+                      .label::after {
+                        content: ' {% if not is_state("binary_sensor.piscine_volet_position_100pc_ouverte", "on") %}Bloquée par le volet{% elif is_state("switch.piscine_fontaine", "on") %}Activée{% elif is_state("switch.piscine_fontaine", "off") %}Désactivée{% else %}Inconnu{% endif %}';
+                        align-self: flex-start;
+                        font-size: 12px;
+                        font-weight: 400;
+                        margin-top: 3px;
+                        margin-bottom: -3px;
+                        {% if not is_state("binary_sensor.piscine_volet_position_100pc_ouverte", "on") %}
+                          opacity: 0.8;
+                        {% endif %}
+                      }
+                    tap_action:
+                      action: more-info
+                styles: |-
+                  :host {
+                    --feature-button-spacing: 8px;
+                  }
+              - type: custom:service-call
+                entries:
+                  - type: toggle
+                    entity_id: switch.piscine_fontaine
+                    icon: none
+                    tap_action:
+                      action: toggle
+                      target:
+                        entity_id: switch.piscine_fontaine
+                      data: {}
+                    thumb: default
+                    unchecked_icon: mdi:power-on
+                    checked_icon: mdi:power-off
+                    check_numeric: true
+                    allow_list: true
+                    full_swipe: false
+                    haptics: true
+                    styles: >-
+                      {% if not
+                      is_state("binary_sensor.piscine_volet_position_100pc_ouverte",
+                      "on") %}
+
+                      :host {
+                        pointer-events: none;
+                        cursor: not-allowed;
+                      }
+
+                      {% endif %}
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: heading
+            heading: Filtration
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.piscine_volume_filtre_daily
+                icon: mdi:air-filter
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.anteavs_vitesse_de_filtration
+                icon: mdi:speedometer
+                visibility:
+                  - condition: state
+                    entity: sensor.tild_vp_statut_filtration
+                    state_not: Arrêtée
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: false
+                show_icon: true
+                entity: input_boolean.piscine_optimisation_volet_solaire
+                state_content: name
+                icon: fa6-solid:sun
+                color: amber
+                visibility:
+                  - condition: state
+                    entity: input_boolean.piscine_optimisation_volet_solaire
+                    state: 'on'
+                tap_action:
+                  action: more-info
+            tap_action:
+              action: navigate
+              navigation_path: /config/devices/device/6c04dfe5cffdeaba21490dc9b3f10478
+          - type: custom:custom-features-card
+            features:
+              - type: custom:service-call
+                entries:
+                  - type: button
+                    entity_id: binary_sensor.tild_vp_etat_filtration
+                    tap_action:
+                      action: more-info
+                      target:
+                        entity_id: binary_sensor.tild_vp_etat_filtration
+                      data: {}
+                    thumb: tile-icon
+                    styles: |-
+                      :host {
+                        left: -2px;
+                      }
+                    icon: mdi:heat-pump-outline
+                    haptics: true
+                  - type: button
+                    entity_id: binary_sensor.tild_vp_etat_filtration
+                    icon: ''
+                    autofill_entity_id: false
+                    thumb: transparent
+                    label: ' Pompe'
+                    styles: |-
+                      :host {
+                        justify-content: flex-start;
+                        flex-direction: row;
+                      }
+                      .label {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        text-align: left;
+                        width: fit-content;
+                        font-size: 14px;
+                        font-weight: 500;
+                      }
+                      .label::after {
+                        content: ' {{ states('sensor.tild_vp_statut_filtration') }}';
+                        align-self: flex-start;
+                        font-size: 12px;
+                        font-weight: 400;
+                        margin-top: 3px;
+                        margin-bottom: -3px;
+                        color: var(--secondary-text-color);
+                      }
+                    tap_action:
+                      action: more-info
+                  - type: button
+                    entity_id: input_boolean.tild_filtration_p1_active
+                    icon: tabler:circle-dashed-number-1
+                    haptics: true
+                    tap_action:
+                      action: toggle
+                      target:
+                        entity_id: input_boolean.tild_filtration_p1_active
+                      data: {}
+                    hold_action:
+                      action: navigate
+                      navigation_path: /lovelace/piscine-programmation
+                    styles: |-
+                      :host {
+                        flex-basis: 40%;
+                        {% if is_state("input_boolean.tild_filtration_p1_active", "on") %}
+                        --color: #83b868;
+                        --opacity: 0.5;
+                        {% endif %}
+                      }
+                  - type: button
+                    entity_id: input_boolean.tild_filtration_p2_active
+                    icon: tabler:circle-dashed-number-2
+                    haptics: true
+                    tap_action:
+                      action: toggle
+                      target:
+                        entity_id: input_boolean.tild_filtration_p2_active
+                      data: {}
+                    hold_action:
+                      action: navigate
+                      navigation_path: /lovelace/piscine-programmation
+                    styles: |-
+                      :host {
+                        flex-basis: 40%;
+                        {% if is_state("input_boolean.tild_filtration_p2_active", "on") %}
+                        --color: #83b868;
+                        --opacity: 0.5;
+                        {% endif %}
+                      }
+                styles: |-
+                  :host {
+                    --feature-button-spacing: 8px;
+                    --feature-color: #ffc107;
+                  }
+              - type: custom:service-call
+                entries:
+                  - type: toggle
+                    entity_id: switch.tild_vp_filtration_marche_continue
+                    icon: >-
+                      {% if
+                      is_state("switch.tild_vp_filtration_marche_continue",
+                      "off") %} mdi:calendar-clock {% elif
+                      is_state("switch.tild_vp_filtration_marche_continue",
+                      "on") %} mdi:hours-24 {% endif %}   
+                    tap_action:
+                      action: toggle
+                      target:
+                        entity_id: switch.tild_vp_filtration_marche_continue
+                      data: {}
+                    haptics: true
+                    unchecked_icon: mdi:hours-24
+                    checked_icon: mdi:calendar-clock
+                    allow_list: true
+                    check_numeric: false
+                    thumb: default
+                    checked_values: []
+                    styles: |-
+                      :host {
+                        {% if is_state("switch.tild_vp_filtration_marche_continue", "off") %}
+                        --color: #8b91f5;
+                        --opacity: 0.3
+                        {% elif is_state("switch.tild_vp_filtration_marche_continue", "on") %}
+                        --color: #f5c480;
+                        {% endif %}
+                        ;
+                      }
+              - type: custom:service-call
+                entries:
+                  - type: dropdown
+                    entity_id: select.anteavs_vitesse_de_filtration
+                    options:
+                      - entity_id: select.anteavs_vitesse_de_filtration
+                        option: Auto
+                        tap_action:
+                          action: perform-action
+                          perform_action: select.select_option
+                          data:
+                            option: Auto
+                          target:
+                            entity_id: select.anteavs_vitesse_de_filtration
+                        label: Automatique
+                        icon: mdi:fan-auto
+                      - entity_id: select.anteavs_vitesse_de_filtration
+                        option: Éco
+                        tap_action:
+                          action: perform-action
+                          perform_action: select.select_option
+                          data:
+                            option: Éco
+                          target:
+                            entity_id: select.anteavs_vitesse_de_filtration
+                        icon: mdi:fan-speed-1
+                        label: Éco
+                      - entity_id: select.anteavs_vitesse_de_filtration
+                        option: Normale
+                        tap_action:
+                          action: perform-action
+                          perform_action: select.select_option
+                          data:
+                            option: Normale
+                          target:
+                            entity_id: select.anteavs_vitesse_de_filtration
+                        icon: bha:fan-speed-2
+                        label: Normale
+                      - entity_id: select.anteavs_vitesse_de_filtration
+                        option: Turbo
+                        tap_action:
+                          action: perform-action
+                          perform_action: select.select_option
+                          data:
+                            option: Turbo
+                          target:
+                            entity_id: select.anteavs_vitesse_de_filtration
+                        icon: mdi:fan-speed-3
+                        label: Turbo
+                    styles: ''
+                styles: |2-
+                                   :host {
+                                          {% if is_state("sensor.tild_vp_statut_filtration", "Arrêtée") %}
+                                          display: none;
+                                          {% endif %}    
+                                        }
+            grid_options:
+              columns: 12
+              rows: auto
+          - type: heading
+            heading: Pompe à Chaleur
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.pool_house_t02_temperature_eau_entree
+                icon: ph:sign-in-light
+                tap_action:
+                  action: more-info
+                color: blue
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.pool_house_t03_temperature_eau_sortie
+                tap_action:
+                  action: more-info
+                icon: ph:sign-out-light
+                color: red
+              - type: entity
+                show_state: true
+                show_icon: true
+                tap_action:
+                  action: more-info
+                entity: sensor.pac_delta_temperature
+                visibility:
+                  - condition: state
+                    entity: binary_sensor.pool_house_o01_compresseur
+                    state: 'on'
+              - type: entity
+                show_state: true
+                show_icon: true
+                tap_action:
+                  action: more-info
+                entity: sensor.pac_piscine_compressor_ratio
+                visibility:
+                  - condition: state
+                    entity: binary_sensor.tild_vp_etat_auxiliaire
+                    state_not: 'off'
+            tap_action:
+              action: navigate
+              navigation_path: /config/devices/device/8c45520865da25e14df3b09235bfab01
+          - type: custom:custom-features-card
+            features:
+              - type: custom:service-call
+                entries:
+                  - type: button
+                    entity_id: binary_sensor.tild_vp_etat_auxiliaire
+                    tap_action:
+                      action: more-info
+                      target:
+                        entity_id: binary_sensor.tild_vp_etat_auxiliaire
+                      data: {}
+                    thumb: tile-icon
+                    styles: |-
+                      :host {
+                        left: -2px;
+                      }
+                    icon: bha:heat-pump
+                    haptics: true
+                  - type: button
+                    entity_id: binary_sensor.tild_vp_etat_auxiliaire
+                    icon: ''
+                    autofill_entity_id: false
+                    thumb: transparent
+                    label: ' PAC'
+                    styles: |-
+                      :host {
+                        justify-content: flex-start;
+                        flex-direction: row;
+                      }
+                      .label {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        text-align: left;
+                        width: fit-content;
+                        font-size: 14px;
+                        font-weight: 500;
+                      }
+                      .label::after {
+                        content: ' {% if is_state("binary_sensor.pool_house_o01_compresseur", "on") and is_state("sensor.pool_house_pac_fonctionnement_en_cours", "Chauffage") %}Active - Chauffage{% elif is_state("binary_sensor.pool_house_o01_compresseur", "on") and is_state("sensor.pool_house_pac_fonctionnement_en_cours", "Refroidissement") %}Active - Refroidissement{% elif is_state("binary_sensor.pool_house_o01_compresseur", "on") %}Active{% elif is_state("binary_sensor.tild_vp_etat_auxiliaire", "on") %}Standby{% else %}Off{% endif %}';
+                        align-self: flex-start;
+                        font-size: 12px;
+                        font-weight: 400;
+                        margin-top: 3px;
+                        margin-bottom: -3px;
+                        color: var(--secondary-text-color);
+                      }
+                    tap_action:
+                      action: more-info
+                  - type: button
+                    entity_id: input_boolean.tild_aux_p1_active
+                    icon: tabler:circle-dashed-number-1
+                    haptics: true
+                    tap_action:
+                      action: toggle
+                      target:
+                        entity_id: input_boolean.tild_aux_p1_active
+                      data: {}
+                    hold_action:
+                      action: navigate
+                      navigation_path: /lovelace/piscine-programmation
+                    styles: |-
+                      :host {
+                        flex-basis: 40%;
+                        {% if is_state("input_boolean.tild_aux_p1_active", "on") %}
+                        --color: #83b868;
+                        --opacity: 0.5;
+                        {% endif %}
+                      }
+                  - type: button
+                    entity_id: input_boolean.tild_aux_p2_active
+                    icon: tabler:circle-dashed-number-2
+                    haptics: true
+                    tap_action:
+                      action: toggle
+                      target:
+                        entity_id: input_boolean.tild_aux_p2_active
+                      data: {}
+                    hold_action:
+                      action: navigate
+                      navigation_path: /lovelace/piscine-programmation
+                    styles: |-
+                      :host {
+                        flex-basis: 40%;
+                        {% if is_state("input_boolean.tild_aux_p2_active", "on") %}
+                        --color: #83b868;
+                        --opacity: 0.5;
+                        {% endif %}
+                      }
+                styles: |-
+                  :host {
+                    --feature-button-spacing: 8px;
+                    --feature-color: #ffc107;
+                  }
+              - type: custom:service-call
+                entries:
+                  - type: toggle
+                    entity_id: switch.tild_vp_auxiliaire_marche_continue
+                    icon: >-
+                      {% if
+                      is_state("switch.tild_vp_auxiliaire_marche_continue",
+                      "off") %}
+                        mdi:calendar-clock
+                      {% elif
+                      is_state("switch.tild_vp_auxiliaire_marche_continue",
+                      "on") %}
+                        mdi:hours-24
+                      {% endif %}   
+                    tap_action:
+                      action: toggle
+                      target:
+                        entity_id: switch.tild_vp_auxiliaire_marche_continue
+                      data: {}
+                    haptics: true
+                    unchecked_icon: mdi:hours-24
+                    checked_icon: mdi:calendar-clock
+                    value_from_hass_delay: 3000
+                    styles: |-
+                      :host {
+                        {% if is_state("switch.tild_vp_auxiliaire_marche_continue", "off") %}
+                        --color: #8b91f5;
+                        --opacity: 0.3
+                        {% elif is_state("switch.tild_vp_auxiliaire_marche_continue", "on") %}
+                        --color: #f5c480;
+                        {% endif %}
+                        ;
+                      }
+              - type: custom:service-call
+                entries:
+                  - type: spinbox
+                    entity_id: number.pool_house_pac_consigne_de_temperature
+                    tap_action:
+                      action: perform-action
+                      perform_action: number.set_value
+                      target:
+                        entity_id: number.pool_house_pac_consigne_de_temperature
+                      data:
+                        value: '{{ value }}'
+                    range:
+                      - 15
+                      - 35
+                    step: 0.5
+                    haptics: true
+                    label: '{{ value }} °C'
+                    unit_of_measurement: °C
+                    value_from_hass_delay: 5000
+                    debounce_time: 1000
+                  - type: dropdown
+                    entity_id: select.pool_house_pac_mode_du_ventilateur
+                    options:
+                      - entity_id: select.pool_house_pac_mode_du_ventilateur
+                        tap_action:
+                          action: perform-action
+                          perform_action: select.select_option
+                          target:
+                            entity_id:
+                              - select.pool_house_pac_mode_du_ventilateur
+                          data:
+                            option: Automatique
+                        option: Automatique
+                        value_attribute: options
+                        icon: mdi:fan-auto
+                        label: Automatique
+                      - entity_id: select.pool_house_pac_mode_du_ventilateur
+                        tap_action:
+                          action: perform-action
+                          perform_action: select.select_option
+                          target:
+                            entity_id: select.pool_house_pac_mode_du_ventilateur
+                          data:
+                            option: Silencieux
+                        value_attribute: options
+                        option: Silencieux
+                        label: Silencieux
+                        icon: mdi:volume-off
+                    haptics: true
+                    value_from_hass_delay: 10000
+                    icon: mdi:fan
+            grid_options:
+              columns: 12
+              rows: auto
+      - type: grid
+        cards:
+          - type: heading
+            heading: Eau et Traitement
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: binary_sensor.phileo_vp_injection_en_cours
+                name: pH
+                state_content: name
+                color: light-blue
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: binary_sensor.oxeo_vp_injection_en_cours
+                name: ORP
+                state_content: name
+                color: red
+                tap_action:
+                  action: more-info
+          - type: custom:vertical-stack-in-card
+            cards:
+              - type: tile
+                entity: sensor.tild_vp_temperature
+                name: Température de l'eau
+                icon: mdi:pool-thermometer
+                hide_state: true
+                vertical: false
+                features:
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        entity_id: sensor.tild_vp_temperature
+                        icon: ''
+                        unit_of_measurement: °C
+                        autofill_entity_id: false
+                        haptics: true
+                        label: '{{ value | float  | string | replace(''.'', '','') }} °'
+                        styles: |-
+                          :host {
+                            flex-basis: 100px;
+                            --color: #8dc9f9;
+                            --opacity: 30%;
+                            margin-left: auto; 
+                            margin-right: 0;
+                            flex-shrink: 0;
+                          }
+                        tap_action:
+                          action: more-info
+                features_position: inline
+              - type: custom:statistics-graph-chart-card
+                card_header_size: 0px
+                card_shadow: false
+                card_border: false
+                card_padding: 10
+                card_header_color: '#000000'
+                card_header_weight: normal
+                show_now_line: false
+                card_icon_size: '0'
+                card_icon_color: '#607d8b'
+                show_tooltip_total: false
+                include_area_names: true
+                show_x_ticks: true
+                show_y_ticks: true
+                animate_graph: true
+                interval_picker_position: center
+                interval_options:
+                  - 24H
+                  - 3D
+                  - 7D
+                  - 14D
+                  - 30D
+                  - 90D
+                  - 6M
+                  - 1Y
+                group_by_picker_position: right
+                hours_to_show: 168
+                points_per_hour: 1
+                tooltip_match_axis: false
+                tooltip_order: default
+                height: 120
+                graph_start: day
+                gauge_value_position: below
+                lower_bound: ~22
+                upper_bound: ~35
+                y_axis_ticks: 5
+                y_axis_decimals: 0
+                duration_unit: h
+                x_axis_font_size: 9
+                x_axis_date_color: '#607d8b'
+                language: fr
+                x_grid_style: dotted
+                x_grid_width: 0
+                y_grid_style: dashed
+                show_date_picker: true
+                date_picker_position: bottom
+                date_picker_default_mode: last_7d
+                date_picker_modes:
+                  - last_7d
+                  - last_15d
+                  - last_30d
+                  - last_90d
+                  - last_12m
+                align_header: center
+                group_by: date
+                entities:
+                  - entity: sensor.tild_vp_temperature
+                    statistic_id: null
+                    name: Température Eau
+                    color: '#2196f3'
+                    show_state: false
+                    show_extrema: never
+                    show_data_labels: true
+                    line_width: 1.5
+                    z_index: -1
+                    number_format: comma
+                    fill_opacity: 1
+                    unit: °
+                    aggregate_func: max
+                    gradient: false
+                  - entity: sensor.pac_consigne_temperature_lts
+                    color: '#f44336'
+                    auto_hide: false
+                    show_extrema: never
+                    line_width: 1
+                    graph_type: step
+                    show_fill: false
+                    name: Température Cible
+                    z_index: 2
+                    number_format: comma
+                    unit: °
+                    smooth: false
+                    aggregate_func: last
+                    show_state: false
+                    trend_period_hours: 1.3
+                    show_trend_icon: false
+                    color_thresholds:
+                      enabled: false
+                      values: []
+                      last_color: true
+                    rise_fall_colors:
+                      enabled: false
+                      increase: '#2ecc71'
+                      decrease: '#e74c3c'
+                      stable: '#95a5a6'
+                    forecast_horizon: 0
+                  - entity: sensor.pool_house_t03_temperature_eau_sortie
+                    statistic_id: null
+                    name: Sortie PAC
+                    color: '#03a9f4'
+                    primary_state_as: max
+                    show_state: false
+                    show_trend_icon: false
+                    show_extrema: never
+                    aggregate_func: max
+                    line_width: 0.5
+                    line_style: dashed
+                    auto_hide: false
+                    number_format: comma
+                    fill_opacity: 0.05
+                    unit: °
+                    gradient: false
+                  - entity: binary_sensor.pool_house_o01_compresseur
+                    color: '#f39c12'
+                    graph_type: state_strip
+                    show_extrema: never
+                    show_line: false
+                    show_state: false
+                    show_trend_icon: false
+                    show_fill: false
+                    name: PAC Active
+                    aggregate_func: max
+                    enabled: false
+                annotations: []
+                grid_options:
+                  rows: auto
+                  columns: 12
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding-top: 0px !important;
+                    }
+          - type: custom:vertical-stack-in-card
+            cards:
+              - type: tile
+                entity: sensor.phileo_vp_volume_injecte_24h
+                name: Today
+                icon: mdi:ph
+                hide_state: false
+                state_content: state
+                vertical: false
+                features:
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        entity_id: sensor.phileo_vp_valeur_du_ph
+                        icon: ''
+                        autofill_entity_id: false
+                        label: '{{ value | float | round(1) }} pH'
+                        tap_action:
+                          action: more-info
+                        styles: |-
+                          :host {
+                            flex-basis: 100px;
+                            {% if (states("sensor.phileo_vp_valeur_du_ph") | float < (states("number.phileo_vp_consigne_ph") | float + 0.5)) and (states("sensor.phileo_vp_valeur_du_ph") | float > (states("number.phileo_vp_consigne_ph") | float - 0.5))  %}
+                            --color: green;
+                            {% elif (states("sensor.phileo_vp_valeur_du_ph") | float < (states("number.phileo_vp_consigne_ph") | float + 1.0)) and (states("sensor.phileo_vp_valeur_du_ph") | float > (states("number.phileo_vp_consigne_ph") | float - 1.0))  %}
+                            --color: orange;
+                            {% else  %}
+                            --color: red;
+                            {% endif %}
+                          }
+                features_position: inline
+              - type: custom:statistics-graph-chart-card
+                card_shadow: false
+                card_border: false
+                card_padding: 5
+                card_border_radius: 0
+                show_now_line: false
+                show_tooltip_total: false
+                hours_to_show: 168
+                points_per_hour: 1
+                tooltip_match_axis: false
+                tooltip_order: default
+                height: 100
+                min_bound_range: 0.6
+                lower_bound: '6.7'
+                upper_bound: '7.5'
+                y_axis_ticks: 5
+                y_axis_decimals: 1
+                y_axis_number_format: comma
+                x_axis_font_size: 8
+                x_axis_interval: 1d
+                datetime_format: DD/MM
+                language: fr
+                x_grid_style: dashed
+                y_grid_style: dashed
+                show_date_picker: true
+                date_picker_position: bottom
+                date_picker_default_mode: last_7d
+                date_picker_modes:
+                  - week
+                align_header: center
+                group_by: date
+                entities:
+                  - entity: sensor.phileo_vp_valeur_du_ph
+                    statistic_id: null
+                    name: Valeur pH
+                    color: '#2196f3'
+                    show_extrema: never
+                    show_state: false
+                    number_format: comma
+                    graph_type: bar
+                  - entity: number.phileo_vp_consigne_ph
+                    statistic_id: null
+                    name: Consigne pH
+                    color: '#f44336'
+                    show_extrema: never
+                    line_width: 1
+                    show_state: false
+                    show_trend_icon: false
+                    show_fill: false
+                    fixed_value: true
+                annotations: []
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding-top: 0px !important;
+                    }
+                grid_options:
+                  columns: 6
+                  rows: auto
+              - type: custom:custom-features-card
+                features:
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        icon: ''
+                        autofill_entity_id: false
+                        thumb: transparent
+                        label: Consigne
+                        styles: |-
+                          :host {
+                            justify-content: flex-start;
+                            flex-direction: row;
+                            flex-basis: 105px;
+                            left: 5px;
+                            height: 36px;
+                          }
+                          .label {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            text-align: left;
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 500;
+                          }
+                        tap_action:
+                          action: more-info
+                        entity_id: number.phileo_vp_volume_du_conteneur
+                      - type: spinbox
+                        entity_id: number.phileo_vp_consigne_ph
+                        tap_action:
+                          action: perform-action
+                          perform_action: number.set_value
+                          target:
+                            entity_id: number.phileo_vp_consigne_ph
+                          data:
+                            value: '{{ value | float }}'
+                        range:
+                          - 6.8
+                          - 7.6
+                        step: 0.1
+                        unit_of_measurement: pH
+                        label: '{{value }}'
+                        haptics: true
+                        value_from_hass_delay: 5000
+                        debounce_time: 1000
+                        autofill_entity_id: false
+                        styles: |-
+                          :host {
+                            height: 36px;
+                          }
+                    styles: |-
+                      :host {
+                        --feature-button-spacing: 8px;
+                      }
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        icon: ''
+                        autofill_entity_id: false
+                        thumb: transparent
+                        styles: |-
+                          :host {
+                            justify-content: flex-start;
+                            flex-direction: row;
+                            flex-basis: 105px;
+                            left: 5px;
+                            height: 36px;
+                          }
+                          .label {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            text-align: left;
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 500;
+                          }
+                        tap_action:
+                          action: more-info
+                        entity_id: number.phileo_vp_volume_du_conteneur
+                        label: Bidon
+                      - type: spinbox
+                        entity_id: number.phileo_vp_volume_du_conteneur
+                        tap_action:
+                          action: perform-action
+                          perform_action: number.set_value
+                          target:
+                            entity_id: number.phileo_vp_volume_du_conteneur
+                          data:
+                            value: '{{ value }}'
+                        range:
+                          - 0
+                          - 50
+                        step: 1
+                        unit_of_measurement: L
+                        label: '{{value }} L'
+                        haptics: true
+                        value_from_hass_delay: 5000
+                        debounce_time: 1000
+                        styles: |-
+                          :host {
+                            height: 36px;
+                          }
+                    styles: |-
+                      :host {
+                        --feature-button-spacing: 8px;
+                      }
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        icon: ''
+                        autofill_entity_id: false
+                        thumb: transparent
+                        label: Limite
+                        styles: |-
+                          :host {
+                            justify-content: flex-start;
+                            flex-direction: row;
+                            flex-basis: 105px;
+                            left: 5px;
+                            height: 36px;
+                          }
+                          .label {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            text-align: left;
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 500;
+                          }
+                        tap_action:
+                          action: more-info
+                        entity_id: number.phileo_vp_volume_max_injecte_en_24_heures
+                        haptics: true
+                      - type: spinbox
+                        entity_id: number.phileo_vp_volume_max_injecte_en_24_heures
+                        tap_action:
+                          action: perform-action
+                          perform_action: number.set_value
+                          target:
+                            entity_id: number.phileo_vp_volume_max_injecte_en_24_heures
+                          data:
+                            value: '{{ value }}'
+                        range:
+                          - 0
+                          - 3
+                        step: 0.1
+                        unit_of_measurement: L
+                        label: >-
+                          {{ value | float | string | replace('.', ',') }}
+                          L/jour
+                        haptics: true
+                        value_from_hass_delay: 5000
+                        debounce_time: 1000
+                        styles: |-
+                          :host {
+                            height: 36px;
+                          }
+                    styles: |-
+                      :host {
+                        --feature-button-spacing: 8px;
+                      }
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        entity_id: sensor.phileo_vp_derniere_calibration
+                        thumb: transparent
+                        label: >-
+                          calibration : {{ time_since(value | as_datetime) }}
+                          ago
+                        autofill_entity_id: false
+                        styles: |-
+                          :host {
+                            height: 10px;
+                          }
+                          .label {
+                            font-size: 12px;
+                            font-weight: 300;
+                          }
+            grid_options:
+              columns: 6
+              rows: auto
+          - type: custom:vertical-stack-in-card
+            cards:
+              - type: tile
+                entity: sensor.oxeo_vp_volume_injecte_24h
+                name: Today
+                icon: tabler:bleach-chlorine
+                hide_state: false
+                state_content: state
+                vertical: false
+                features:
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        entity_id: sensor.oxeo_vp_valeur_du_orp
+                        icon: ''
+                        autofill_entity_id: false
+                        label: '{{ value | float }} ORP'
+                        tap_action:
+                          action: more-info
+                        styles: |-
+                          :host {
+                            flex-basis: 100px;
+                            {% if (states("sensor.oxeo_vp_valeur_du_orp") | int < (states("number.oxeo_vp_consigne_orp") | int + 100)) and (states("sensor.oxeo_vp_valeur_du_orp") | int > (states("number.oxeo_vp_consigne_orp") | int - 100))  %}
+                            --color: green;
+                            {% elif (states("sensor.oxeo_vp_valeur_du_orp") | int < (states("number.oxeo_vp_consigne_orp") | int + 200)) and (states("sensor.oxeo_vp_valeur_du_orp") | int > (states("number.oxeo_vp_consigne_orp") | int - 200))  %}
+                            --color: orange;
+                            {% else  %}
+                            --color: red;
+                            {% endif %}
+                          }
+                features_position: inline
+              - type: custom:statistics-graph-chart-card
+                card_shadow: false
+                card_border: false
+                card_padding: 5
+                card_border_radius: 0
+                show_now_line: false
+                show_tooltip_total: false
+                hours_to_show: 168
+                points_per_hour: 1
+                tooltip_match_axis: false
+                tooltip_order: default
+                height: 100
+                min_bound_range: 200
+                lower_bound: '550'
+                upper_bound: '700'
+                y_axis_ticks: 5
+                y_axis_decimals: 0
+                y_axis_number_format: comma
+                x_axis_font_size: 8
+                x_axis_interval: 1d
+                datetime_format: DD/MM
+                language: fr
+                x_grid_style: dashed
+                y_grid_style: dashed
+                show_date_picker: true
+                date_picker_position: bottom
+                date_picker_default_mode: last_7d
+                date_picker_modes:
+                  - week
+                align_header: center
+                group_by: date
+                entities:
+                  - entity: sensor.oxeo_vp_valeur_du_orp
+                    statistic_id: null
+                    name: Valeur ORP
+                    color: '#2196f3'
+                    show_extrema: never
+                    show_state: false
+                    number_format: comma
+                    graph_type: bar
+                    decimals: 0
+                  - entity: number.oxeo_vp_consigne_orp
+                    statistic_id: null
+                    name: Consigne ORP
+                    color: '#f44336'
+                    show_extrema: never
+                    line_width: 1
+                    show_state: false
+                    show_trend_icon: false
+                    show_fill: false
+                    fixed_value: true
+                    decimals: 0
+                annotations: []
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding-top: 0px !important;
+                    }
+                grid_options:
+                  columns: 6
+                  rows: auto
+              - type: custom:custom-features-card
+                features:
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        icon: ''
+                        autofill_entity_id: false
+                        thumb: transparent
+                        label: Consigne
+                        styles: |-
+                          :host {
+                            justify-content: flex-start;
+                            flex-direction: row;
+                            flex-basis: 105px;
+                            left: 5px;
+                            height: 36px;
+                          }
+                          .label {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            text-align: left;
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 500;
+                          }
+                        tap_action:
+                          action: more-info
+                        entity_id: number.oxeo_vp_volume_du_conteneur
+                      - type: spinbox
+                        entity_id: number.oxeo_vp_consigne_orp
+                        tap_action:
+                          action: perform-action
+                          perform_action: number.set_value
+                          target:
+                            entity_id: number.oxeo_vp_consigne_orp
+                          data:
+                            value: '{{ value | int }}'
+                        range:
+                          - 500
+                          - 750
+                        step: 1
+                        unit_of_measurement: mV
+                        label: '{{value }} mV'
+                        haptics: true
+                        value_from_hass_delay: 5000
+                        debounce_time: 1000
+                        styles: |-
+                          :host {
+                            height: 36px;
+                          }
+                    styles: |-
+                      :host {
+                        --feature-button-spacing: 8px;
+                      }
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        icon: ''
+                        autofill_entity_id: false
+                        thumb: transparent
+                        styles: |-
+                          :host {
+                            justify-content: flex-start;
+                            flex-direction: row;
+                            flex-basis: 105px;
+                            left: 5px;
+                            height: 36px;
+                          }
+                          .label {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            text-align: left;
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 500;
+                          }
+                        tap_action:
+                          action: more-info
+                        entity_id: number.oxeo_vp_volume_du_conteneur
+                        label: Bidon
+                      - type: spinbox
+                        entity_id: number.oxeo_vp_volume_du_conteneur
+                        tap_action:
+                          action: perform-action
+                          perform_action: number.set_value
+                          target:
+                            entity_id: number.oxeo_vp_volume_du_conteneur
+                          data:
+                            value: '{{ value }}'
+                        range:
+                          - 0
+                          - 50
+                        step: 1
+                        unit_of_measurement: L
+                        label: '{{value }} L'
+                        haptics: true
+                        value_from_hass_delay: 5000
+                        debounce_time: 1000
+                        styles: |-
+                          :host {
+                            height: 36px;
+                          }
+                    styles: |-
+                      :host {
+                        --feature-button-spacing: 8px;
+                      }
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        icon: ''
+                        autofill_entity_id: false
+                        thumb: transparent
+                        label: Limite
+                        styles: |-
+                          :host {
+                            justify-content: flex-start;
+                            flex-direction: row;
+                            flex-basis: 105px;
+                            left: 5px;
+                            height: 36px;
+                          }
+                          .label {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            text-align: left;
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 500;
+                          }
+                        tap_action:
+                          action: more-info
+                        entity_id: number.oxeo_vp_volume_max_injecte_en_24_heures
+                        haptics: true
+                      - type: spinbox
+                        entity_id: number.oxeo_vp_volume_max_injecte_en_24_heures
+                        tap_action:
+                          action: perform-action
+                          perform_action: number.set_value
+                          target:
+                            entity_id: number.oxeo_vp_volume_max_injecte_en_24_heures
+                          data:
+                            value: '{{ value }}'
+                        range:
+                          - 0
+                          - 3
+                        step: 0.1
+                        unit_of_measurement: L
+                        label: >-
+                          {{ value | float | string | replace('.', ',') }}
+                          L/jour
+                        haptics: true
+                        value_from_hass_delay: 5000
+                        debounce_time: 1000
+                        styles: |-
+                          :host {
+                            height: 36px;
+                          }
+                    styles: |-
+                      :host {
+                        --feature-button-spacing: 8px;
+                      }
+                  - type: custom:service-call
+                    entries:
+                      - type: button
+                        entity_id: sensor.oxeo_vp_derniere_calibration
+                        thumb: transparent
+                        label: >-
+                          calibration : {{ time_since(value | as_datetime) }}
+                          ago
+                        autofill_entity_id: false
+                        styles: |-
+                          :host {
+                            height: 10px;
+                          }
+                          .label {
+                            font-size: 12px;
+                            font-weight: 300;
+                          }
+            grid_options:
+              columns: 6
+              rows: auto
+    cards: []
