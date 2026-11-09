@@ -1,0 +1,249 @@
+alias: Piscine - Filtration Décodage Trame vers Helpers
+description: Lit la trame hexadécimale de filtration et synchronise les helpers
+triggers:
+  - trigger: state
+    entity_id: sensor.tild_vp_programme_filtration_brut
+  - trigger: homeassistant
+    event: start
+conditions:
+  - condition: template
+    value_template: >-
+      {{ states('sensor.tild_vp_programme_filtration_brut') not in ['unknown',
+      'unavailable', ''] }}
+actions:
+  - variables:
+      trame: '{{ states(''sensor.tild_vp_programme_filtration_brut'') }}'
+      p1_jours_int: '{{ trame[2:4] | int(base=16, default=0) }}'
+      p1_actif: '{{ (p1_jours_int // 128) % 2 == 1 }}'
+      p1_sam: '{{ (p1_jours_int // 64) % 2 == 1 }}'
+      p1_ven: '{{ (p1_jours_int // 32) % 2 == 1 }}'
+      p1_jeu: '{{ (p1_jours_int // 16) % 2 == 1 }}'
+      p1_mer: '{{ (p1_jours_int // 8) % 2 == 1 }}'
+      p1_mar: '{{ (p1_jours_int // 4) % 2 == 1 }}'
+      p1_lun: '{{ (p1_jours_int // 2) % 2 == 1 }}'
+      p1_dim: '{{ (p1_jours_int // 1) % 2 == 1 }}'
+      p1_thermo_hex: '{{ trame[4:6] }}'
+      p1_vitesse_hex: '{{ trame[6:8] }}'
+      p1_thermo_actif: '{{ p1_thermo_hex == ''01'' }}'
+      p1_vitesse_str: >-
+        {% if p1_vitesse_hex == '01' %}Éco{% elif p1_vitesse_hex == '02'
+        %}Normale{% elif p1_vitesse_hex == '03' %}Turbo{% else %}Automatique{%
+        endif %}
+      p1_nb: '{{ trame[8:10] | int(base=16, default=0) }}'
+      p1_d_q: '{{ trame[10:12] | int(base=16) if p1_nb >= 1 else -1 }}'
+      p1_f_q: '{{ trame[12:14] | int(base=16) if p1_nb >= 1 else -1 }}'
+      p1_c2_d_q: '{{ trame[14:16] | int(base=16) if p1_nb >= 2 else -1 }}'
+      p1_c2_f_q: '{{ trame[16:18] | int(base=16) if p1_nb >= 2 else -1 }}'
+      p1_c3_d_q: '{{ trame[18:20] | int(base=16) if p1_nb >= 3 else -1 }}'
+      p1_c3_f_q: '{{ trame[20:22] | int(base=16) if p1_nb >= 3 else -1 }}'
+      p2_start_idx: '{{ 10 + (p1_nb * 4) }}'
+      p2_jours_int: '{{ trame[p2_start_idx : p2_start_idx+2] | int(base=16, default=0) }}'
+      p2_actif: '{{ (p2_jours_int // 128) % 2 == 1 }}'
+      p2_sam: '{{ (p2_jours_int // 64) % 2 == 1 }}'
+      p2_ven: '{{ (p2_jours_int // 32) % 2 == 1 }}'
+      p2_jeu: '{{ (p2_jours_int // 16) % 2 == 1 }}'
+      p2_mer: '{{ (p2_jours_int // 8) % 2 == 1 }}'
+      p2_mar: '{{ (p2_jours_int // 4) % 2 == 1 }}'
+      p2_lun: '{{ (p2_jours_int // 2) % 2 == 1 }}'
+      p2_dim: '{{ (p2_jours_int // 1) % 2 == 1 }}'
+      p2_thermo_hex: '{{ trame[p2_start_idx+2 : p2_start_idx+4] }}'
+      p2_vitesse_hex: '{{ trame[p2_start_idx+4 : p2_start_idx+6] }}'
+      p2_thermo_actif: '{{ p2_thermo_hex == ''01'' }}'
+      p2_vitesse_str: >-
+        {% if p2_vitesse_hex == '01' %}Éco{% elif p2_vitesse_hex == '02'
+        %}Normale{% elif p2_vitesse_hex == '03' %}Turbo{% else %}Automatique{%
+        endif %}
+      p2_nb_idx: '{{ p2_start_idx + 6 }}'
+      p2_nb: '{{ trame[p2_nb_idx : p2_nb_idx+2] | int(base=16, default=0) }}'
+      p2_idx: '{{ p2_start_idx + 8 }}'
+      p2_d_q: '{{ trame[p2_idx : p2_idx+2] | int(base=16) if p2_nb >= 1 else -1 }}'
+      p2_f_q: '{{ trame[p2_idx+2 : p2_idx+4] | int(base=16) if p2_nb >= 1 else -1 }}'
+      p2_c2_d_q: '{{ trame[p2_idx+4 : p2_idx+6] | int(base=16) if p2_nb >= 2 else -1 }}'
+      p2_c2_f_q: '{{ trame[p2_idx+6 : p2_idx+8] | int(base=16) if p2_nb >= 2 else -1 }}'
+      p2_c3_d_q: '{{ trame[p2_idx+8 : p2_idx+10] | int(base=16) if p2_nb >= 3 else -1 }}'
+      p2_c3_f_q: '{{ trame[p2_idx+10 : p2_idx+12] | int(base=16) if p2_nb >= 3 else -1 }}'
+  - action: input_boolean.turn_{{ 'on' if p1_thermo_actif else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p1_thermoregule
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_vitesse
+    data:
+      option: '{{ p1_vitesse_str }}'
+  - action: input_boolean.turn_{{ 'on' if p1_actif else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p1_active
+  - action: input_boolean.turn_{{ 'on' if p1_lun else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p1_monday
+  - action: input_boolean.turn_{{ 'on' if p1_mar else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p1_tuesday
+  - action: input_boolean.turn_{{ 'on' if p1_mer else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p1_wednesday
+  - action: input_boolean.turn_{{ 'on' if p1_jeu else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p1_thursday
+  - action: input_boolean.turn_{{ 'on' if p1_ven else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p1_friday
+  - action: input_boolean.turn_{{ 'on' if p1_sam else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p1_saturday
+  - action: input_boolean.turn_{{ 'on' if p1_dim else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p1_sunday
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_h1_debut
+    data:
+      option: '{{ ''-'' if p1_d_q == -1 else ''%02d'' | format((p1_d_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_m1_debut
+    data:
+      option: '{{ ''-'' if p1_d_q == -1 else ''%02d'' | format((p1_d_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_h1_fin
+    data:
+      option: '{{ ''-'' if p1_f_q == -1 else ''%02d'' | format((p1_f_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_m1_fin
+    data:
+      option: '{{ ''-'' if p1_f_q == -1 else ''%02d'' | format((p1_f_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_h2_debut
+    data:
+      option: '{{ ''-'' if p1_c2_d_q == -1 else ''%02d'' | format((p1_c2_d_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_m2_debut
+    data:
+      option: '{{ ''-'' if p1_c2_d_q == -1 else ''%02d'' | format((p1_c2_d_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_h2_fin
+    data:
+      option: '{{ ''-'' if p1_c2_f_q == -1 else ''%02d'' | format((p1_c2_f_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_m2_fin
+    data:
+      option: '{{ ''-'' if p1_c2_f_q == -1 else ''%02d'' | format((p1_c2_f_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_h3_debut
+    data:
+      option: '{{ ''-'' if p1_c3_d_q == -1 else ''%02d'' | format((p1_c3_d_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_m3_debut
+    data:
+      option: '{{ ''-'' if p1_c3_d_q == -1 else ''%02d'' | format((p1_c3_d_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_h3_fin
+    data:
+      option: '{{ ''-'' if p1_c3_f_q == -1 else ''%02d'' | format((p1_c3_f_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p1_m3_fin
+    data:
+      option: '{{ ''-'' if p1_c3_f_q == -1 else ''%02d'' | format((p1_c3_f_q % 4) * 15) }}'
+  - action: input_boolean.turn_{{ 'on' if p2_actif else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p2_active
+  - action: input_boolean.turn_{{ 'on' if p2_thermo_actif else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p2_thermoregule
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_vitesse
+    data:
+      option: '{{ p2_vitesse_str }}'
+  - action: input_boolean.turn_{{ 'on' if p2_lun else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p2_monday
+  - action: input_boolean.turn_{{ 'on' if p2_mar else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p2_tuesday
+  - action: input_boolean.turn_{{ 'on' if p2_mer else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p2_wednesday
+  - action: input_boolean.turn_{{ 'on' if p2_jeu else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p2_thursday
+  - action: input_boolean.turn_{{ 'on' if p2_ven else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p2_friday
+  - action: input_boolean.turn_{{ 'on' if p2_sam else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p2_saturday
+  - action: input_boolean.turn_{{ 'on' if p2_dim else 'off' }}
+    target:
+      entity_id: input_boolean.tild_filtration_p2_sunday
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_h1_debut
+    data:
+      option: '{{ ''-'' if p2_d_q == -1 else ''%02d'' | format((p2_d_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_m1_debut
+    data:
+      option: '{{ ''-'' if p2_d_q == -1 else ''%02d'' | format((p2_d_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_h1_fin
+    data:
+      option: '{{ ''-'' if p2_f_q == -1 else ''%02d'' | format((p2_f_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_m1_fin
+    data:
+      option: '{{ ''-'' if p2_f_q == -1 else ''%02d'' | format((p2_f_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_h2_debut
+    data:
+      option: '{{ ''-'' if p2_c2_d_q == -1 else ''%02d'' | format((p2_c2_d_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_m2_debut
+    data:
+      option: '{{ ''-'' if p2_c2_d_q == -1 else ''%02d'' | format((p2_c2_d_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_h2_fin
+    data:
+      option: '{{ ''-'' if p2_c2_f_q == -1 else ''%02d'' | format((p2_c2_f_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_m2_fin
+    data:
+      option: '{{ ''-'' if p2_c2_f_q == -1 else ''%02d'' | format((p2_c2_f_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_h3_debut
+    data:
+      option: '{{ ''-'' if p2_c3_d_q == -1 else ''%02d'' | format((p2_c3_d_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_m3_debut
+    data:
+      option: '{{ ''-'' if p2_c3_d_q == -1 else ''%02d'' | format((p2_c3_d_q % 4) * 15) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_h3_fin
+    data:
+      option: '{{ ''-'' if p2_c3_f_q == -1 else ''%02d'' | format((p2_c3_f_q / 4)|int) }}'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tild_filtration_p2_m3_fin
+    data:
+      option: '{{ ''-'' if p2_c3_f_q == -1 else ''%02d'' | format((p2_c3_f_q % 4) * 15) }}'
+mode: restart
