@@ -90,7 +90,8 @@ Additionally, I vibe-coded 4 HA automations to decode and encode the programs fo
   - input_select.tild_aux_p2_m3_fin
 
 I also share the code of my HA cards for editing programs. It requires the custom-features-card extension : https://github.com/Nerwyn/custom-card-features
-I share you the code of the full dashboard page in the file ha-card-fullpage, here is how it looks :
+
+I share you the code of the full dashboard page in the file ha-cards-fullpage, here is how it looks :
 
 <img width="837" height="516" alt="image" src="https://github.com/user-attachments/assets/08c0254e-afb5-47ec-9c3a-edbead9ea6d5" />
 
