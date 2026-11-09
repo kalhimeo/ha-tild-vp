@@ -89,9 +89,14 @@ Additionally, I vibe-coded 4 HA automations to decode and encode the programs fo
   - input_select.tild_aux_p2_h3_fin
   - input_select.tild_aux_p2_m3_fin
 
-I also share the code of my HA cards for editing programs. It requires the custom-features-card extension : https://github.com/Nerwyn/custom-card-features
+I also share the code of my different HA cards. Those require the custom-features-card extension :(https://github.com/Nerwyn/custom-card-features) but also some others like the vertical-stack-in-card (https://github.com/ofekashery/vertical-stack-in-card) and statistics-graph-chart-card (https://github.com/cataseven/Statistics-Graph-Chart-Card).
 
-I share you the code of the full dashboard page in the file ha-cards-fullpage, here is how it looks :
+There is one page with the main pool informations, and a separate page with the programs. I have put the code from the whole pages here for reference only. You may want to pick only the parts that interest you.
+
+Here is how they look :
+
+<img width="1623" height="1132" alt="image" src="https://github.com/user-attachments/assets/477e338c-11b0-4e22-b7f6-40995ac8f36d" />
+
 
 <img width="842" height="530" alt="image" src="https://github.com/user-attachments/assets/3875b74d-5854-4750-bfb6-c47802b7237c" />
 
