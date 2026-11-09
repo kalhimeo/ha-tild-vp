@@ -52,7 +52,7 @@
                         font-weight: 500;
                       }
                       .label::after {
-                        content: ' {% if is_state("input_boolean.tild_filtration_p1_active", "on") %}Actif{% elif is_state("input_boolean.tild_filtration_p1_active", "off") %}Désactivée{% else %}Inconnu{% endif %}';
+                        content: ' {% if is_state("input_boolean.tild_filtration_p1_active", "on") %}Actif{% elif is_state("input_boolean.tild_filtration_p1_active", "off") %}Désactivé{% else %}Inconnu{% endif %}';
                         align-self: flex-start;
                         font-size: 12px;
                         font-weight: 400;
@@ -2056,7 +2056,7 @@
                         font-weight: 500;
                       }
                       .label::after {
-                        content: ' {% if is_state("input_boolean.tild_filtration_p2_active", "on") %}Actif{% elif is_state("input_boolean.tild_filtration_p2_active", "off") %}Désactivée{% else %}Inconnu{% endif %}';
+                        content: ' {% if is_state("input_boolean.tild_filtration_p2_active", "on") %}Actif{% elif is_state("input_boolean.tild_filtration_p2_active", "off") %}Désactivé{% else %}Inconnu{% endif %}';
                         align-self: flex-start;
                         font-size: 12px;
                         font-weight: 400;
@@ -4067,7 +4067,7 @@
                         font-weight: 500;
                       }
                       .label::after {
-                        content: ' {% if is_state("input_boolean.tild_aux_p1_active", "on") %}Actif{% elif is_state("input_boolean.tild_aux_p1_active", "off") %}Désactivée{% else %}Inconnu{% endif %}';
+                        content: ' {% if is_state("input_boolean.tild_aux_p1_active", "on") %}Actif{% elif is_state("input_boolean.tild_aux_p1_active", "off") %}Désactivé{% else %}Inconnu{% endif %}';
                         align-self: flex-start;
                         font-size: 12px;
                         font-weight: 400;
@@ -6006,7 +6006,7 @@
                         font-weight: 500;
                       }
                       .label::after {
-                        content: ' {% if is_state("input_boolean.tild_aux_p2_active", "on") %}Actif{% elif is_state("input_boolean.tild_aux_p2_active", "off") %}Désactivée{% else %}Inconnu{% endif %}';
+                        content: ' {% if is_state("input_boolean.tild_aux_p2_active", "on") %}Actif{% elif is_state("input_boolean.tild_aux_p2_active", "off") %}Désactivé{% else %}Inconnu{% endif %}';
                         align-self: flex-start;
                         font-size: 12px;
                         font-weight: 400;
