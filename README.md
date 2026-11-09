@@ -89,4 +89,8 @@ Additionally, I vibe-coded 4 HA automations to decode and encode the programs fo
   - input_select.tild_aux_p2_h3_fin
   - input_select.tild_aux_p2_m3_fin
 
+I also share the code of my HA cards for editing programs. It requires the custom-features-card extension : https://github.com/Nerwyn/custom-card-features
+
+<img width="837" height="516" alt="image" src="https://github.com/user-attachments/assets/08c0254e-afb5-47ec-9c3a-edbead9ea6d5" />
+
 Do not hesitate to submit any improvements or fixes if you find bugs. Thanks!
