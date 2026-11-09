@@ -1,0 +1,1282 @@
+
+# AnteaVS Configuration Begin
+
+- sensor:
+    name: RSSI
+    state_topic: "anteavs_XXXXXXXXXXX/i8_r/rssi/info/reported"
+    unique_id: anteavs_XXXXXXXXXXX.rssi
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/antea-vs
+        manufacturer: CCEI
+        model: AnteaVS
+        name: AnteaVS
+        identifiers: AnteaVS
+
+- sensor:
+    name: ID
+    state_topic: "anteavs_XXXXXXXXXXX/s44_r/device_id/info/reported"
+    unique_id: anteavs_XXXXXXXXXXX.device_id
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/antea-vs
+        manufacturer: CCEI
+        model: AnteaVS
+        name: AnteaVS
+        identifiers: AnteaVS
+
+- sensor:
+    name: Numéro de série
+    state_topic: "anteavs_XXXXXXXXXXX/s33_r/serial_num/info/reported"
+    unique_id: anteavs_XXXXXXXXXXX.serial_num
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/antea-vs
+        manufacturer: CCEI
+        model: AnteaVS
+        name: AnteaVS
+        identifiers: AnteaVS
+
+- sensor:
+    name: Version du firmware
+    state_topic: "anteavs_XXXXXXXXXXX/u16_r/sw_vers/info/reported"
+    unique_id: anteavs_XXXXXXXXXXX.sw_vers
+    enabled_by_default: false
+    value_template: >-
+        {{ float('%0x' % value | int(0))/100 }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/antea-vs
+        manufacturer: CCEI
+        model: AnteaVS
+        name: AnteaVS
+        identifiers: AnteaVS
+
+- sensor:
+    name: Version du matériel
+    state_topic: "anteavs_XXXXXXXXXXX/u8_r/hw_vers/info/reported"
+    unique_id: anteavs_XXXXXXXXXXX.hw_vers
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/antea-vs
+        manufacturer: CCEI
+        model: AnteaVS
+        name: AnteaVS
+        identifiers: AnteaVS
+
+- sensor:
+    name: Vitesse de filtration
+    state_topic: anteavs_XXXXXXXXXXX/u8_w/filt_speed/info/reported
+    unique_id: anteavs_XXXXXXXXXXX.filt_speed
+    value_template: >-
+        {%- set mapper = {
+          '0': 'Arrêtée',
+          '1': 'Éco',
+          '2': 'Normale',
+          '3': 'Turbo',
+          '129': 'Éco',
+          '130': 'Normale',
+          '131': 'Turbo'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/antea-vs
+        manufacturer: CCEI
+        model: AnteaVS
+        name: AnteaVS
+        identifiers: AnteaVS
+
+- select:
+    name: Vitesse de filtration
+    state_topic: anteavs_XXXXXXXXXXX/u8_w/filt_speed/info/reported
+    command_topic: "anteavs_XXXXXXXXXXX/u8_w/filt_speed/info/desired"
+    unique_id: anteavs_XXXXXXXXXXX.filt_speed_select
+    options:
+        - "Auto"
+        - "Éco"
+        - "Normale"
+        - "Turbo"
+    command_template: >-
+        {%- set mapper = {
+          'Auto': 3,
+          'Éco': 129,
+          'Normale': 130,
+          'Turbo': 131
+        } -%}
+        {{ mapper.get(value, 3) }}
+    value_template: >-
+        {%- set mapper = {
+          '0': 'Auto',
+          '1': 'Auto',
+          '2': 'Auto',
+          '3': 'Auto',
+          '129': 'Éco',
+          '130': 'Normale',
+          '131': 'Turbo'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/antea-vs
+        manufacturer: CCEI
+        model: AnteaVS
+        name: AnteaVS
+        identifiers: AnteaVS
+
+- switch:
+    name: Mode Skimmer
+    state_topic: anteavs_XXXXXXXXXXX/u8_w/filt_skim/info/reported
+    command_topic: "anteavs_XXXXXXXXXXX/u8_w/filt_skim/info/desired"
+    unique_id: anteavs_XXXXXXXXXXX.filt_skim
+    payload_off: "128"
+    payload_on: "1"
+    state_on: "129"
+    state_off: "0"
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/antea-vs
+        manufacturer: CCEI
+        model: AnteaVS
+        name: AnteaVS
+        identifiers: AnteaVS
+
+# AnteaVS Configuration End
+
+# Phileox Configuration Begin
+
+- sensor:
+    name: RSSI
+    state_topic: "phileox_XXXXXXXXXXX/i8_r/rssi/info/reported"
+    unique_id: phileox_XXXXXXXXXXX.rssi
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+
+- sensor:
+    name: ID
+    state_topic: "phileox_XXXXXXXXXXX/s44_r/device_id/info/reported"
+    unique_id: phileox_XXXXXXXXXXX.device_id
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- sensor:
+    name: Numéro de série
+    state_topic: "phileox_XXXXXXXXXXX/s33_r/serial_num/info/reported"
+    unique_id: phileox_XXXXXXXXXXX.serial_num
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- sensor:
+    name: Version du firmware
+    state_topic: "phileox_XXXXXXXXXXX/u16_r/sw_vers/info/reported"
+    unique_id: phileox_XXXXXXXXXXX.sw_vers
+    enabled_by_default: false
+    value_template: >-
+      {{ float('%0x' % value | int(0))/100 }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- sensor:
+    name: Version du matériel
+    state_topic: "phileox_XXXXXXXXXXX/u8_r/hw_vers/info/reported"
+    unique_id: phileox_XXXXXXXXXXX.hw_vers
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- number:
+    name: Consigne pH
+    command_topic: "phileox_XXXXXXXXXXX/u16_w/consigne_ph/consigne/desired"
+    state_topic: "phileox_XXXXXXXXXXX/u16_w/consigne_ph/consigne/reported"
+    unique_id: "phileox_XXXXXXXXXXX.consigne_ph"
+    device_class: "ph"
+    mode: box
+    command_template: >-
+      {{ float(value) * 100 }}
+    value_template: >-
+      {{ float(value) * 0.01 }}
+    step: 0.2
+    min: 6.8
+    max: 7.6
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- number:
+    name: Volume max injecté en 24 heures
+    command_topic: "phileox_XXXXXXXXXXX/u16_w/vol_max_24h/info/desired"
+    state_topic: "phileox_XXXXXXXXXXX/u16_w/vol_max_24h/info/reported"
+    unique_id: "phileox_XXXXXXXXXXX.vol_max_24h"
+    unit_of_measurement: "L/day"
+    command_template: >-
+        {{ float(value) * 100 }}
+    value_template: >-
+        {{ float(value) * 0.01 }}
+    step: 0.10
+    min: 0
+    max: 3.00
+    mode: box
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- number:
+    name: Volume du conteneur
+    command_topic: "phileox_XXXXXXXXXXX/u16_w/vol_bac/info/desired"
+    state_topic: "phileox_XXXXXXXXXXX/u16_w/vol_bac/info/reported"
+    unique_id: "phileox_XXXXXXXXXXX.vol_bac"
+    unit_of_measurement: "L"
+    command_template: >-
+        {{ int(value) * 100 }}
+    value_template: >-
+        {{ int(value) * 0.01 }}
+    step: 1
+    min: 0
+    max: 50
+    mode: box
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- sensor:
+    name: Valeur du pH
+    state_topic: "phileox_XXXXXXXXXXX/u16_r/value_ph/value/reported"
+    unique_id: phileox_XXXXXXXXXXX.value_ph
+    device_class: "ph"
+    state_class: "measurement"
+    value_template: >-
+        {%- set v = value | float(default=65535) -%}
+        {%- if v in [65534, 65535] -%}
+          None 
+        {%- else -%}
+          {{ (v * 0.01) | round(2) }}
+        {%- endif -%}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- sensor:
+    name: Mode du pH
+    state_topic: "phileox_XXXXXXXXXXX/u8_r/mode_ph/info/reported"
+    unique_id: phileox_XXXXXXXXXXX.mode_ph
+    value_template: >-
+        {%- set mapper = {
+          '0': 'pH-',
+          '1': 'pH+',
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- sensor:
+    name: Dernière Calibration
+    state_topic: "phileox_XXXXXXXXXXX/u32_w/date_mes_ph/info/reported"
+    unique_id: phileox_XXXXXXXXXXX.date_mes_ph
+    device_class: timestamp
+    value_template: >-
+        {{ (value | as_datetime | as_local).isoformat() }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- sensor:
+    name: Volume injecté 24h
+    state_topic: "phileox_XXXXXXXXXXX/u16_r/vol_24h_inject/value/reported"
+    unique_id: phileox_XXXXXXXXXXX.vol_24h_inject
+    unit_of_measurement: "L"
+    device_class: volume
+    state_class: "total_increasing"
+    value_template: >-
+        {{ float(value) * 0.01 }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- sensor:
+    name: Volume injecté total
+    state_topic: "phileox_XXXXXXXXXXX/u16_r/vol_tot_inject/value/reported"
+    unique_id: phileox_XXXXXXXXXXX.vol_tot_inject
+    unit_of_measurement: "L"
+    device_class: volume
+    state_class: "total"
+    value_template: >-
+        {{ float(value) }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- binary_sensor:
+    name: Injection en cours
+    state_topic: "phileox_XXXXXXXXXXX/u8_r/inject_on/value/reported"
+    unique_id: phileox_XXXXXXXXXXX.inject_on
+    value_template: >-
+        {%- set mapper = {
+          '0': 'OFF',
+          '1': 'ON',
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- binary_sensor:
+    name: Détection de flux
+    state_topic: "phileox_XXXXXXXXXXX/u8_r/flow_on/value/reported"
+    unique_id: phileox_XXXXXXXXXXX.flow_on
+    value_template: >-
+        {%- set mapper = {
+          '0': 'OFF',
+          '1': 'ON',
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+- switch:
+    name: Mode Hiver
+    state_topic: "phileox_XXXXXXXXXXX/u8_w/winter_mode/info/reported"
+    command_topic: "phileox_XXXXXXXXXXX/u8_w/winter_mode/info/desired"
+    unique_id: phileox_XXXXXXXXXXX.winter_mode
+    payload_off: "0"
+    payload_on: "1"
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/phileo-vp
+        manufacturer: CCEI
+        model: Phileo VP
+        name: Phileo VP
+        identifiers: Phileo VP
+
+# Phileox Configuration End
+
+# Oxeox Configuration Begin
+
+- sensor:
+    name: RSSI
+    state_topic: "oxeox_XXXXXXXXXXX/i8_r/rssi/info/reported"
+    unique_id: oxeox_XXXXXXXXXXX.rssi
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+
+- sensor:
+    name: ID
+    state_topic: "oxeox_XXXXXXXXXXX/s44_r/device_id/info/reported"
+    unique_id: oxeox_XXXXXXXXXXX.device_id
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- sensor:
+    name: Numéro de série
+    state_topic: "oxeox_XXXXXXXXXXX/s33_r/serial_num/info/reported"
+    unique_id: oxeox_XXXXXXXXXXX.serial_num
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- sensor:
+    name: Version du firmware
+    state_topic: "oxeox_XXXXXXXXXXX/u16_r/sw_vers/info/reported"
+    unique_id: oxeox_XXXXXXXXXXX.sw_vers
+    enabled_by_default: false
+    value_template: >-
+        {{ float('%0x' % value | int(0))/100 }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- sensor:
+    name: Version du matériel
+    state_topic: "oxeox_XXXXXXXXXXX/u8_r/hw_vers/info/reported"
+    unique_id: oxeox_XXXXXXXXXXX.hw_vers
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- number:
+    name: Consigne ORP
+    command_topic: "oxeox_XXXXXXXXXXX/u16_w/consigne_orp/consigne/desired"
+    state_topic: "oxeox_XXXXXXXXXXX/u16_w/consigne_orp/consigne/reported"
+    unique_id: "oxeox_XXXXXXXXXXX.consigne_orp"
+    unit_of_measurement: "mV"
+    device_class: voltage
+    mode: box
+    command_template: >-
+        {{ float(value) }}
+    value_template: >-
+        {{ float(value) }}
+    step: 10
+    min: 500
+    max: 750
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- number:
+    name: Volume max injecté en 24 heures
+    command_topic: "oxeox_XXXXXXXXXXX/u16_w/vol_max_24h/info/desired"
+    state_topic: "oxeox_XXXXXXXXXXX/u16_w/vol_max_24h/info/reported"
+    unique_id: "oxeox_XXXXXXXXXXX.vol_max_24h"
+    unit_of_measurement: "L/day"
+    command_template: >-
+        {{ float(value) * 100 }}
+    value_template: >-
+        {{ float(value) * 0.01 }}
+    step: 0.10
+    min: 0
+    max: 5.00
+    mode: box
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- number:
+    name: Volume du conteneur
+    command_topic: "oxeox_XXXXXXXXXXX/u16_w/vol_bac/info/desired"
+    state_topic: "oxeox_XXXXXXXXXXX/u16_w/vol_bac/info/reported"
+    unique_id: "oxeox_XXXXXXXXXXX.vol_bac"
+    unit_of_measurement: "L"
+    command_template: >-
+        {{ int(value) * 100 }}
+    value_template: >-
+        {{ int(value) * 0.01 }}
+    step: 1
+    min: 0
+    max: 50
+    mode: box
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- sensor:
+    name: Valeur du ORP
+    state_topic: "oxeox_XXXXXXXXXXX/u16_r/value_orp/value/reported"
+    unique_id: oxeox_XXXXXXXXXXX.value_orp
+    device_class: "voltage"
+    unit_of_measurement: "mV"
+    state_class: "measurement"
+    value_template: >-
+        {%- set v = value | int(default=65535) -%}
+        {%- if v in [65534, 65535] -%}
+          None 
+        {%- else -%}
+          {{ v }}
+        {%- endif -%}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- sensor:
+    name: Dernière Calibration
+    state_topic: "oxeox_XXXXXXXXXXX/u32_w/date_mes_orp/info/reported"
+    unique_id: oxeox_XXXXXXXXXXX.date_mes_orp
+    device_class: timestamp
+    value_template: >-
+        {{ (value | as_datetime | as_local).isoformat() }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- sensor:
+    name: Volume injecté 24h
+    state_topic: "oxeox_XXXXXXXXXXX/u16_r/vol_24h_inject/value/reported"
+    unique_id: oxeox_XXXXXXXXXXX.vol_24h_inject
+    unit_of_measurement: "L"
+    device_class: volume
+    state_class: "total_increasing"
+    value_template: >-
+        {{ float(value) * 0.01 }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- sensor:
+    name: Volume injecté total
+    state_topic: "oxeox_XXXXXXXXXXX/u16_r/vol_tot_inject/value/reported"
+    unique_id: oxeox_XXXXXXXXXXX.vol_tot_inject
+    unit_of_measurement: "L"
+    device_class: volume
+    state_class: "total"
+    value_template: >-
+        {{ float(value) }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- binary_sensor:
+    name: Injection en cours
+    state_topic: "oxeox_XXXXXXXXXXX/u8_r/inject_on/value/reported"
+    unique_id: oxeox_XXXXXXXXXXX.inject_on
+    value_template: >-
+        {%- set mapper = {
+          '0': 'OFF',
+          '1': 'ON',
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- switch:
+    name: Priorité pH
+    state_topic: "oxeox_XXXXXXXXXXX/u8_w/priority/info/reported"
+    command_topic: "oxeox_XXXXXXXXXXX/u8_w/priority/info/desired"
+    unique_id: oxeox_XXXXXXXXXXX.orp_priority
+    payload_off: "0"
+    payload_on: "1"
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+- switch:
+    name: Mode Hiver
+    state_topic: "oxeox_XXXXXXXXXXX/u8_w/winter_mode/info/reported"
+    command_topic: "oxeox_XXXXXXXXXXX/u8_w/winter_mode/info/desired"
+    unique_id: oxeox_XXXXXXXXXXX.winter_mode
+    payload_off: "0"
+    payload_on: "1"
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/oxeo-vp
+        manufacturer: CCEI
+        model: Oxeo VP
+        name: Oxeo VP
+        identifiers: Oxeo VP
+
+# Oxeox Configuration End
+
+# Tild Configuration Begin
+
+- sensor:
+    name: RSSI
+    state_topic: "tild_XXXXXXXXXXX/i8_r/rssi/info/reported"
+    unique_id: tild_XXXXXXXXXXX.rssi
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- sensor:
+    name: ID
+    state_topic: "tild_XXXXXXXXXXX/s44_r/device_id/info/reported"
+    unique_id: tild_XXXXXXXXXXX.device_id
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- sensor:
+    name: Numéro de série
+    state_topic: "tild_XXXXXXXXXXX/s33_r/serial_num/info/reported"
+    unique_id: tild_XXXXXXXXXXX.serial_num
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- sensor:
+    name: Version du firmware
+    state_topic: "tild_XXXXXXXXXXX/u16_r/sw_vers/info/reported"
+    unique_id: tild_XXXXXXXXXXX.sw_vers
+    enabled_by_default: false
+    value_template: >-
+        {{ float('%0x' % value | int(0))/100 }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- sensor:
+    name: Version du matériel
+    state_topic: "tild_XXXXXXXXXXX/u8_r/hw_vers/info/reported"
+    unique_id: tild_XXXXXXXXXXX.hw_vers
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- sensor:
+    name: Température d'eau
+    state_topic: "tild_XXXXXXXXXXX/u16_r/value_temp/value/reported"
+    unique_id: "tild_XXXXXXXXXXX.value_temp"
+    device_class: "temperature"
+    unit_of_measurement: "°C"
+    state_class: "measurement"
+    suggested_display_precision: 1
+    value_template: >-
+        {%- set v = value | float(default=65535) -%}
+        {%- if v in [65534, 65535] -%}
+        None 
+        {%- else -%}
+          {{ (v * 0.1) | round(1) }}
+        {%- endif -%}
+    device:
+      configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+      manufacturer: CCEI
+      model: Tild VP
+      name: Tild VP
+      identifiers: Tild VP
+
+- light:
+    name: Éclairage
+    state_topic: "tild_XXXXXXXXXXX/u8_w/light_state/info/reported"
+    command_topic: "tild_XXXXXXXXXXX/u8_w/light_state/info/desired"
+    unique_id: tild_XXXXXXXXXXX.light_state
+    payload_off: "0"
+    payload_on: "1"
+    brightness_state_topic: "tild_XXXXXXXXXXX/u8_w/light_bright/info/reported"
+    brightness_command_topic: "tild_XXXXXXXXXXX/u8_w/light_bright/info/desired"
+    brightness_command_template: >-
+        {%- if value < 100 -%}
+          0
+        {%- elif value < 150 -%}
+          1
+        {%- elif value < 200 -%}
+          2
+        {%- else -%}
+          3
+        {%- endif -%}
+    brightness_value_template: >-
+        {%- set mapper = {
+          '0': 64,
+          '1': 127,
+          '2': 191,
+          '3': 255
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    effect_command_topic: "tild_XXXXXXXXXXX/u8_w/light_code/info/desired"
+    effect_state_topic: "tild_XXXXXXXXXXX/u8_w/light_code/info/reported"
+    effect_list:
+        - "Warm"
+        - "Cold"
+        - "Blue"
+        - "Lagoon"
+        - "Cyan"
+        - "Green"
+        - "Purple"
+        - "Magenta"
+        - "Pink"
+        - "Red"
+        - "Orange"
+        - "Gradiant"
+        - "Rainbow"
+        - "Parade"
+        - "Techno"
+        - "Horizon"
+        - "Random"
+        - "Magical"
+    effect_command_template: >-
+        {%- set mapper = {
+          'Warm': 0,
+          'Cold': 1,
+          'Blue': 2,
+          'Lagoon': 3,
+          'Cyan': 4,
+          'Purple': 5,
+          'Magenta': 6,
+          'Pink': 7,
+          'Red': 8,
+          'Orange': 9,
+          'Green': 10,
+          'Gradiant': 16,
+          'Rainbow': 17,
+          'Parade': 18,
+          'Techno': 19,
+          'Horizon': 20,
+          'Random': 21,
+          'Magical': 22
+        } -%}
+        {{ mapper.get(value, 0) }}
+    effect_value_template: >-
+        {%- set mapper = {
+          '0': 'Warm',
+          '1': 'Cold',
+          '2': 'Blue',
+          '3': 'Lagoon',
+          '4': 'Cyan',
+          '5': 'Purple',
+          '6': 'Magenta',
+          '7': 'Pink',
+          '8': 'Red',
+          '9': 'Orange',
+          '10': 'Green',
+          '16': 'Gradiant',
+          '17': 'Rainbow',
+          '18': 'Parade',
+          '19': 'Techno',
+          '20': 'Horizon',
+          '21': 'Random',
+          '22': 'Magical'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- number:
+    name: Vitesse Effets 
+    command_topic: "tild_XXXXXXXXXXX/u8_w/light_speed/info/desired"
+    state_topic: "tild_XXXXXXXXXXX/u8_w/light_speed/info/reported"
+    unique_id: tild_XXXXXXXXXXX.light_speed
+    mode: slider
+    command_template: >-
+        {{ float(value) }}
+    value_template: >-
+        {{ float(value) }}
+    step: 1
+    min: 0
+    max: 2
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP 
+
+- select:
+    name: Luminosité
+    command_topic: "tild_XXXXXXXXXXX/u8_w/light_bright/info/desired"
+    state_topic: "tild_XXXXXXXXXXX/u8_w/light_bright/info/reported"
+    unique_id: tild_XXXXXXXXXXX.light_bright
+    options:
+        - "25%"
+        - "50%"
+        - "75%"
+        - "100%"
+    command_template: >-
+        {%- set mapper = {
+          '25%': 0,
+          '50%': 1,
+          '75%': 2,
+          '100%': 3
+        } -%}
+        {{ mapper.get(value, 3) }}
+    value_template: >-
+        {%- set mapper = {
+          '0': '25%',
+          '1': '50%',
+          '2': '75%',
+          '3': '100%'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP 
+        
+- sensor:
+    name: Effet Éclairage 
+    state_topic: "tild_XXXXXXXXXXX/u8_w/light_code/info/reported"
+    unique_id: tild_XXXXXXXXXXX.light_code_stat
+    value_template: >-
+        {%- set mapper = {
+          '0': 'Warm',
+          '1': 'Cold',
+          '2': 'Blue',
+          '3': 'Lagoon',
+          '4': 'Cyan',
+          '5': 'Purple',
+          '6': 'Magenta',
+          '7': 'Pink',
+          '8': 'Red',
+          '9': 'Orange',
+          '10': 'Green',
+          '16': 'Gradiant',
+          '17': 'Rainbow',
+          '18': 'Parade',
+          '19': 'Techno',
+          '20': 'Horizon',
+          '21': 'Random',
+          '22': 'Magical'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- switch:
+    name: "Filtration Marche Continue"
+    state_topic: "tild_XXXXXXXXXXX/u16_w/filt_state/info/reported"
+    command_topic: "tild_XXXXXXXXXXX/u16_w/filt_state/info/desired"
+    unique_id: "tild_XXXXXXXXXXX.filt_state"
+    payload_on: 1
+    payload_off: 0
+    value_template: >-
+        {%- set mapper = {
+          '0': 0,
+          '1': 1,
+          '2': 0,
+          '3': 1,
+          '8': 0,
+          '9': 1,
+          '10': 0,
+          '11': 1
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    state_on: "1"
+    state_off: "0"
+    device:
+      configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+      manufacturer: CCEI
+      model: Tild VP
+      name: Tild VP
+      identifiers: Tild VP
+
+- sensor:
+    name: "Statut Filtration"
+    unique_id: tild_XXXXXXXXXXX.filt_state
+    state_topic: "tild_XXXXXXXXXXX/u16_w/filt_state/info/reported"
+    value_template: >-
+        {%- set mapper = {
+          '0': 'Arrêtée',
+          '1': 'Active - Forcée',
+          '2': 'Active - Selon le programme',
+          '3': 'Active - Marche continue',
+          '8': 'Active - Forcée par PAC',
+          '9': 'Active - Marche continue',
+          '10': 'Active - Forcée par PAC',
+          '11': 'Active - Marche continue'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+      configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+      manufacturer: CCEI
+      model: Tild VP
+      name: Tild VP
+      identifiers: Tild VP
+
+- binary_sensor:
+    name: "État Filtration"
+    unique_id: tild_XXXXXXXXXXX.filt_state_status_etat
+    state_topic: "tild_XXXXXXXXXXX/u16_w/filt_state/info/reported"
+    value_template: >-
+        {%- set mapper = {
+          '0': 'OFF',
+          '1': 'ON',
+          '2': 'ON',
+          '3': 'ON',
+          '8': 'ON',
+          '9': 'ON',
+          '10': 'ON',
+          '11': 'ON'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- switch:
+    name: Auxiliaire Marche Continue
+    state_topic: "tild_XXXXXXXXXXX/u16_w/aux_conf/info/reported"
+    command_topic: "tild_XXXXXXXXXXX/u16_w/aux_conf/info/desired"
+    unique_id: tild_XXXXXXXXXXX.aux_conf_switch
+    payload_off: 14
+    payload_on: 15
+    value_template: >-
+        {%- set mapper = {
+          '0': 14,
+          '1': 14,
+          '2': 14,
+          '3': 15,
+          '10': 14,
+          '11': 15,
+          '14': 14,
+          '15': 15
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- select:
+    name: Auxiliaire Mode Fonctionnement
+    state_topic: "tild_XXXXXXXXXXX/u16_w/aux_conf/info/reported"
+    command_topic: "tild_XXXXXXXXXXX/u16_w/aux_conf/info/desired"
+    unique_id: tild_XXXXXXXXXXX.aux_conf_select
+    options:
+        - "Programme"
+        - "Programme & Forcer filtration"
+        - "Marche Continue"
+        - "Marche Cont. & Forcer fltration"
+    command_template: >-
+        {%- set mapper = {
+          'Programme': 10,
+          'Marche Continue': 11,
+          'Programme & Forcer filtration': 14,
+          'Marche Cont. & Forcer fltration': 15
+        } -%}
+        {{ mapper.get(value, 2) }}
+    value_template: >-
+        {%- set mapper = {
+          '10': 'Programme',
+          '11': 'Marche Continue',
+          '14': 'Programme & Forcer filtration',
+          '15': 'Marche Cont. & Forcer fltration'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- binary_sensor:
+    name: État Auxiliaire 
+    state_topic: "tild_XXXXXXXXXXX/u8_r/aux_state/info/reported"
+    unique_id: tild_XXXXXXXXXXX.aux_state
+    value_template: >-
+        {%- set mapper = {
+          '0': 'OFF',
+          '1': 'ON',
+          '4': 'OFF',
+          '16': 'OFF'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- select:
+    name: Température protection Gel
+    command_topic: "tild_XXXXXXXXXXX/u8_w/frost_free/info/desired"
+    state_topic: "tild_XXXXXXXXXXX/u8_w/frost_free/info/reported"
+    unique_id: tild_XXXXXXXXXXX.frost_free_select
+    options:
+        - "Off"
+        - "0°C"
+        - "1°C"
+        - "2°C"
+    command_template: >-
+        {%- set mapper = {
+          '0°C': 0,
+          '1°C': 1,
+          '2°C': 2,
+          'Off': 255
+        } -%}
+        {{ mapper.get(value, 2) }}
+    value_template: >-
+        {%- set mapper = {
+          '0': '0°C',
+          '1': '1°C',
+          '2': '2°C',
+          '255': 'Off'
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- sensor:
+    name: Programme Éclairage Brut
+    state_topic: "tild_XXXXXXXXXXX/s44_w/light_sched/info/reported"
+    unique_id: tild_XXXXXXXXXXX.light_sched
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- sensor:
+    name: Programme Auxiliaire Brut
+    state_topic: "tild_XXXXXXXXXXX/s44_w/aux_sched/info/reported"
+    unique_id: tild_XXXXXXXXXXX.aux_sched
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- sensor:
+    name: Programme Filtration Brut
+    state_topic: "tild_XXXXXXXXXXX/s128_w/filt_sched/info/reported"
+    unique_id: tild_XXXXXXXXXXX.filt_sched
+    enabled_by_default: false
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- switch:
+    name: "Forcer Éclairage pendant Filtration"
+    state_topic: "tild_XXXXXXXXXXX/u8_w/filt_light_force/info/reported"
+    command_topic: "tild_XXXXXXXXXXX/u8_w/filt_light_force/info/desired"
+    unique_id: "tild_XXXXXXXXXXX.filt_light_force"
+    payload_on: 1
+    payload_off: 0
+    value_template: >-
+        {%- set mapper = {
+          '0': 0,
+          '1': 1
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    state_on: "1"
+    state_off: "0"
+    device:
+      configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+      manufacturer: CCEI
+      model: Tild VP
+      name: Tild VP
+      identifiers: Tild VP
+
+- binary_sensor:
+    name: Détection de Flux
+    state_topic: "tild_XXXXXXXXXXX/u8_r/flow_on/value/reported"
+    unique_id: tild_XXXXXXXXXXX.flow_on
+    value_template: >-
+        {%- set mapper = {
+          '0': 'OFF',
+          '1': 'ON',
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- binary_sensor:
+    name: Volet fermé
+    state_topic: "tild_XXXXXXXXXXX/u8_r/couv_on/value/reported"
+    unique_id: tild_XXXXXXXXXXX.couv_on
+    value_template: >-
+        {%- set mapper = {
+          '0': 'OFF',
+          '1': 'ON',
+        } -%}
+        {{ mapper.get(value, 'unknown (' ~ value ~ ')') }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+        
+- sensor:
+    name: Minuterie Éclairage
+    state_topic: "tild_XXXXXXXXXXX/u32_w/light_timer/info/reported"
+    unique_id: tild_XXXXXXXXXXX.light_timer
+    device_class: timestamp
+    value_template: >-
+        {{ (value | as_datetime | as_local).isoformat() }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- number:
+    name: Consigne Température
+    command_topic: "tild_XXXXXXXXXXX/u16_w/consigne_temp/consigne/desired"
+    state_topic: "tild_XXXXXXXXXXX/u16_w/consigne_temp/consigne/reported"
+    unique_id: "tild_XXXXXXXXXXX.consigne_temp"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    mode: box
+    command_template: >-
+      {{ int(value) * 10 }}
+    value_template: >-
+      {%- set v = value | float(default=65535) -%}
+      {%- if v in [65534, 65535] -%}
+        -
+      {%- else -%}
+        {{ (v * 0.1) | round(0) }}
+      {%- endif -%}
+    step: 1
+    min: 10
+    max: 40
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- number:
+    name: Ajustement Sonde Température
+    command_topic: "tild_XXXXXXXXXXX/i8_w/temp_adjust/info/desired"
+    state_topic: "tild_XXXXXXXXXXX/i8_w/temp_adjust/info/reported"
+    unique_id: "tild_XXXXXXXXXXX.temp_adjust"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    mode: box
+    command_template: >-
+      {{ (value * 10) | round(0) }}
+    value_template: >-
+      {%- set v = value | float(default=0) -%}
+      {{ (v *0.1) | round(1) }}
+    step: 0.5
+    min: -3.0
+    max: 3.0
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+- sensor:
+    name: Date de dernière mesure Tild
+    state_topic: "tild_XXXXXXXXXXX/u32_w/date_mes/info/reported"
+    unique_id: tild_XXXXXXXXXXX.date_mes
+    device_class: timestamp
+    enabled_by_default: false
+    value_template: >-
+        {{ (value | as_datetime | as_local).isoformat() }}
+    device:
+        configuration_url: https://www.ccei-pool.com/fr/produit/tild-vp
+        manufacturer: CCEI
+        model: Tild VP
+        name: Tild VP
+        identifiers: Tild VP
+
+# Inconnu :
+# Décoder les programmes
+# tild_XXXXXXXXXXX/u8_w/aux_temp_hyst/info/reported (10 ?)
+# tild_XXXXXXXXXXX/u8_w/winter_mode/info/reported (0) -> pas lié avec les winter_mode des phileo et oxeo
+# tild_XXXXXXXXXXX/u16_w/aux_min_temp/info/reported (150 -> 15°)
+# tild_XXXXXXXXXXX/u16_w/filt_serv_inter/info/reported (2 ?) -> filtration asservie, 2 = forcée ? 360 Arrêtée
+# tild_XXXXXXXXXXX/u16_w/light_cut/info/reported (5 ?) -> pour projecteur avec micro impulsions ?
+# tild_XXXXXXXXXXX/i8_w/temp_accuracy/info/reported (360, 20 ?)
+
+# Tild Configuration End
