@@ -96,6 +96,7 @@ Additionally, I vibe-coded 4 HA automations to decode and encode the programs fo
   - input_select.tild_aux_p2_m3_fin
 
 Finally, you will also find the code of my different HA cards. These require additional Marketplace cards like custom-features-card (https://github.com/Nerwyn/custom-card-features), vertical-stack-in-card (https://github.com/ofekashery/vertical-stack-in-card) and statistics-graph-chart-card (https://github.com/cataseven/Statistics-Graph-Chart-Card).
+
 There is one page with all the main pool cards, and a separate page with the program cards. I have put the code from the whole pages here for reference only. You may want to pick only the parts that interest you.
 
 Do not hesitate to submit any improvements or fixes if you find bugs. Thanks!
