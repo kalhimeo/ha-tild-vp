@@ -1,0 +1,161 @@
+alias: Piscine - Auxiliaire Encodage Helpers vers Trame MQTT
+description: >-
+  Génère la trame hexadécimale complète à partir des boutons et listes
+  déroulantes
+triggers:
+  - trigger: state
+    entity_id:
+      - input_boolean.tild_aux_p1_active
+      - input_boolean.tild_aux_p1_monday
+      - input_boolean.tild_aux_p1_tuesday
+      - input_boolean.tild_aux_p1_wednesday
+      - input_boolean.tild_aux_p1_thursday
+      - input_boolean.tild_aux_p1_friday
+      - input_boolean.tild_aux_p1_saturday
+      - input_boolean.tild_aux_p1_sunday
+      - input_select.tild_aux_p1_h1_debut
+      - input_select.tild_aux_p1_m1_debut
+      - input_select.tild_aux_p1_h1_fin
+      - input_select.tild_aux_p1_m1_fin
+      - input_select.tild_aux_p1_h2_debut
+      - input_select.tild_aux_p1_m2_debut
+      - input_select.tild_aux_p1_h2_fin
+      - input_select.tild_aux_p1_m2_fin
+      - input_select.tild_aux_p1_h3_debut
+      - input_select.tild_aux_p1_m3_debut
+      - input_select.tild_aux_p1_h3_fin
+      - input_select.tild_aux_p1_m3_fin
+      - input_boolean.tild_aux_p2_active
+      - input_boolean.tild_aux_p2_monday
+      - input_boolean.tild_aux_p2_tuesday
+      - input_boolean.tild_aux_p2_wednesday
+      - input_boolean.tild_aux_p2_thursday
+      - input_boolean.tild_aux_p2_friday
+      - input_boolean.tild_aux_p2_saturday
+      - input_boolean.tild_aux_p2_sunday
+      - input_select.tild_aux_p2_h1_debut
+      - input_select.tild_aux_p2_m1_debut
+      - input_select.tild_aux_p2_h1_fin
+      - input_select.tild_aux_p2_m1_fin
+      - input_select.tild_aux_p2_h2_debut
+      - input_select.tild_aux_p2_m2_debut
+      - input_select.tild_aux_p2_h2_fin
+      - input_select.tild_aux_p2_m2_fin
+      - input_select.tild_aux_p2_h3_debut
+      - input_select.tild_aux_p2_m3_debut
+      - input_select.tild_aux_p2_h3_fin
+      - input_select.tild_aux_p2_m3_fin
+actions:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - variables:
+      p1_b_actif: '{{ 128 if is_state(''input_boolean.tild_aux_p1_active'', ''on'') else 0 }}'
+      p1_b_sam: '{{ 64 if is_state(''input_boolean.tild_aux_p1_saturday'', ''on'') else 0 }}'
+      p1_b_ven: '{{ 32 if is_state(''input_boolean.tild_aux_p1_friday'', ''on'') else 0 }}'
+      p1_b_jeu: '{{ 16 if is_state(''input_boolean.tild_aux_p1_thursday'', ''on'') else 0 }}'
+      p1_b_mer: '{{ 8 if is_state(''input_boolean.tild_aux_p1_wednesday'', ''on'') else 0 }}'
+      p1_b_mar: '{{ 4 if is_state(''input_boolean.tild_aux_p1_tuesday'', ''on'') else 0 }}'
+      p1_b_lun: '{{ 2 if is_state(''input_boolean.tild_aux_p1_monday'', ''on'') else 0 }}'
+      p1_b_dim: '{{ 1 if is_state(''input_boolean.tild_aux_p1_sunday'', ''on'') else 0 }}'
+      p1_jours_hex: >-
+        {{ '%02X' | format(p1_b_actif + p1_b_sam + p1_b_ven + p1_b_jeu +
+        p1_b_mer + p1_b_mar + p1_b_lun + p1_b_dim) }}
+      p1_c1_ok: >-
+        {{ states('input_select.tild_aux_p1_h1_debut') != '-' and
+        states('input_select.tild_aux_p1_m1_debut') != '-' and
+        states('input_select.tild_aux_p1_h1_fin') != '-' and
+        states('input_select.tild_aux_p1_m1_fin') != '-' }}
+      p1_c2_ok: >-
+        {{ states('input_select.tild_aux_p1_h2_debut') != '-' and
+        states('input_select.tild_aux_p1_m2_debut') != '-' and
+        states('input_select.tild_aux_p1_h2_fin') != '-' and
+        states('input_select.tild_aux_p1_m2_fin') != '-' }}
+      p1_c3_ok: >-
+        {{ states('input_select.tild_aux_p1_h3_debut') != '-' and
+        states('input_select.tild_aux_p1_m3_debut') != '-' and
+        states('input_select.tild_aux_p1_h3_fin') != '-' and
+        states('input_select.tild_aux_p1_m3_fin') != '-' }}
+      p1_nb_creneaux: >-
+        {{ '03' if p1_c3_ok else ('02' if p1_c2_ok else ('01' if p1_c1_ok else
+        '00')) }}
+      p1_data: >-
+        {% if p1_c1_ok %}{{
+        '%02X'|format(states('input_select.tild_aux_p1_h1_debut')|int * 4 +
+        (states('input_select.tild_aux_p1_m1_debut')|int / 15)|int) }}{{
+        '%02X'|format(states('input_select.tild_aux_p1_h1_fin')|int * 4 +
+        (states('input_select.tild_aux_p1_m1_fin')|int / 15)|int) }}{% endif %}
+      p1_c2_data: >-
+        {% if p1_c2_ok %}{{
+        '%02X'|format(states('input_select.tild_aux_p1_h2_debut')|int * 4 +
+        (states('input_select.tild_aux_p1_m2_debut')|int / 15)|int) }}{{
+        '%02X'|format(states('input_select.tild_aux_p1_h2_fin')|int * 4 +
+        (states('input_select.tild_aux_p1_m2_fin')|int / 15)|int) }}{% endif %}
+      p1_c3_data: >-
+        {% if p1_c3_ok %}{{
+        '%02X'|format(states('input_select.tild_aux_p1_h3_debut')|int * 4 +
+        (states('input_select.tild_aux_p1_m3_debut')|int / 15)|int) }}{{
+        '%02X'|format(states('input_select.tild_aux_p1_h3_fin')|int * 4 +
+        (states('input_select.tild_aux_p1_m3_fin')|int / 15)|int) }}{% endif %}
+      bloc_p1: '{{ p1_data ~ p1_c2_data ~ p1_c3_data }}'
+      p2_b_actif: '{{ 128 if is_state(''input_boolean.tild_aux_p2_active'', ''on'') else 0 }}'
+      p2_b_sam: '{{ 64 if is_state(''input_boolean.tild_aux_p2_saturday'', ''on'') else 0 }}'
+      p2_b_ven: '{{ 32 if is_state(''input_boolean.tild_aux_p2_friday'', ''on'') else 0 }}'
+      p2_b_jeu: '{{ 16 if is_state(''input_boolean.tild_aux_p2_thursday'', ''on'') else 0 }}'
+      p2_b_mer: '{{ 8 if is_state(''input_boolean.tild_aux_p2_wednesday'', ''on'') else 0 }}'
+      p2_b_mar: '{{ 4 if is_state(''input_boolean.tild_aux_p2_tuesday'', ''on'') else 0 }}'
+      p2_b_lun: '{{ 2 if is_state(''input_boolean.tild_aux_p2_monday'', ''on'') else 0 }}'
+      p2_b_dim: '{{ 1 if is_state(''input_boolean.tild_aux_p2_sunday'', ''on'') else 0 }}'
+      p2_jours_hex: >-
+        {{ '%02X' | format(p2_b_actif + p2_b_sam + p2_b_ven + p2_b_jeu +
+        p2_b_mer + p2_b_mar + p2_b_lun + p2_b_dim) }}
+      p2_ok: >-
+        {{ states('input_select.tild_aux_p2_h1_debut') != '-' and
+        states('input_select.tild_aux_p2_m1_debut') != '-' and
+        states('input_select.tild_aux_p2_h1_fin') != '-' and
+        states('input_select.tild_aux_p2_m1_fin') != '-' }}
+      p2_c2_ok: >-
+        {{ states('input_select.tild_aux_p2_h2_debut') != '-' and
+        states('input_select.tild_aux_p2_m2_debut') != '-' and
+        states('input_select.tild_aux_p2_h2_fin') != '-' and
+        states('input_select.tild_aux_p2_m2_fin') != '-' }}
+      p2_c3_ok: >-
+        {{ states('input_select.tild_aux_p2_h3_debut') != '-' and
+        states('input_select.tild_aux_p2_m3_debut') != '-' and
+        states('input_select.tild_aux_p2_h3_fin') != '-' and
+        states('input_select.tild_aux_p2_m3_fin') != '-' }}
+      p2_nb_creneaux: >-
+        {{ '03' if p2_c3_ok else ('02' if p2_c2_ok else ('01' if p2_ok else
+        '00')) }}
+      p2_data: >-
+        {% if p2_ok %}{{
+        '%02X'|format(states('input_select.tild_aux_p2_h1_debut')|int * 4 +
+        (states('input_select.tild_aux_p2_m1_debut')|int / 15)|int) }}{{
+        '%02X'|format(states('input_select.tild_aux_p2_h1_fin')|int * 4 +
+        (states('input_select.tild_aux_p2_m1_fin')|int / 15)|int) }}{% endif %}
+      p2_c2_data: >-
+        {% if p2_c2_ok %}{{
+        '%02X'|format(states('input_select.tild_aux_p2_h2_debut')|int * 4 +
+        (states('input_select.tild_aux_p2_m2_debut')|int / 15)|int) }}{{
+        '%02X'|format(states('input_select.tild_aux_p2_h2_fin')|int * 4 +
+        (states('input_select.tild_aux_p2_m2_fin')|int / 15)|int) }}{% endif %}
+      p2_c3_data: >-
+        {% if p2_c3_ok %}{{
+        '%02X'|format(states('input_select.tild_aux_p2_h3_debut')|int * 4 +
+        (states('input_select.tild_aux_p2_m3_debut')|int / 15)|int) }}{{
+        '%02X'|format(states('input_select.tild_aux_p2_h3_fin')|int * 4 +
+        (states('input_select.tild_aux_p2_m3_fin')|int / 15)|int) }}{% endif %}
+      bloc_p2: '{{ p2_data ~ p2_c2_data ~ p2_c3_data }}'
+      trame_finale: >-
+        {{ "02" ~ p1_jours_hex ~ "0000" ~ p1_nb_creneaux ~ bloc_p1 ~
+        p2_jours_hex ~ "0000" ~ p2_nb_creneaux ~ bloc_p2 }}
+      trame_actuelle: '{{ states("sensor.tild_vp_programme_auxiliere_brut") }}'
+  - condition: template
+    value_template: '{{ trame_finale | lower != trame_actuelle | lower }}'
+  - action: mqtt.publish
+    data:
+      topic: tild_XXXXXXXXXXX/s44_w/aux_sched/info/desired
+      payload: '{{ trame_finale }}'
+mode: restart
