@@ -1,5 +1,11 @@
 These files are enhancements to the original CCEI integration here: https://github.com/developer-ccei-pool/home-assistant-vigipool-installer
 
+Among other things, they will let you do nice HA cards like those (see below) :
+
+<img width="1623" height="1132" alt="image" src="https://github.com/user-attachments/assets/477e338c-11b0-4e22-b7f6-40995ac8f36d" />
+
+<img width="842" height="530" alt="image" src="https://github.com/user-attachments/assets/3875b74d-5854-4750-bfb6-c47802b7237c" />
+
 I only own the Tild VP, AnteaVS, Phileo VP, and Oxeo VP, so the enhancements in vigipool.yaml are only for those devices. You have to replace the XXXXXXXX in the code with your model ID.
 
 Additionally, I vibe-coded 4 HA automations to decode and encode the programs for filtration and auxiliary (in my case, the auxiliary is the heat pump; maybe the frame differs for other types). You also need to edit the XXXXX at the end with the serial of your Tild VP and create the following helpers in HA :
@@ -89,15 +95,6 @@ Additionally, I vibe-coded 4 HA automations to decode and encode the programs fo
   - input_select.tild_aux_p2_h3_fin
   - input_select.tild_aux_p2_m3_fin
 
-I also share the code of my different HA cards. Those require the custom-features-card extension :(https://github.com/Nerwyn/custom-card-features) but also some others like the vertical-stack-in-card (https://github.com/ofekashery/vertical-stack-in-card) and statistics-graph-chart-card (https://github.com/cataseven/Statistics-Graph-Chart-Card).
-
-There is one page with the main pool informations, and a separate page with the programs. I have put the code from the whole pages here for reference only. You may want to pick only the parts that interest you.
-
-Here is how they look :
-
-<img width="1623" height="1132" alt="image" src="https://github.com/user-attachments/assets/477e338c-11b0-4e22-b7f6-40995ac8f36d" />
-
-
-<img width="842" height="530" alt="image" src="https://github.com/user-attachments/assets/3875b74d-5854-4750-bfb6-c47802b7237c" />
+You will also find the code of my different HA cards. Those require the custom-features-card extension :(https://github.com/Nerwyn/custom-card-features) but also some others like the vertical-stack-in-card (https://github.com/ofekashery/vertical-stack-in-card) and statistics-graph-chart-card (https://github.com/cataseven/Statistics-Graph-Chart-Card). There is one page with the main pool cards, and a separate page with the program cards. I have put the code from the whole pages here for reference only. You may want to pick only the parts that interest you.
 
 Do not hesitate to submit any improvements or fixes if you find bugs. Thanks!
