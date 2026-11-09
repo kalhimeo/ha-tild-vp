@@ -93,6 +93,6 @@ I also share the code of my HA cards for editing programs. It requires the custo
 
 I share you the code of the full dashboard page in the file ha-cards-fullpage, here is how it looks :
 
-<img width="837" height="516" alt="image" src="https://github.com/user-attachments/assets/08c0254e-afb5-47ec-9c3a-edbead9ea6d5" />
+<img width="842" height="530" alt="image" src="https://github.com/user-attachments/assets/3875b74d-5854-4750-bfb6-c47802b7237c" />
 
 Do not hesitate to submit any improvements or fixes if you find bugs. Thanks!
